@@ -9,6 +9,7 @@ import {
   type ForecastPoint
 } from '../lib/forecast';
 import type { Dictionary } from '../lib/i18n/dictionaries';
+import { LiveForecast } from './LiveForecast';
 import { format } from '../lib/i18n/format';
 
 const CHART = { width: 720, height: 300, padLeft: 46, padRight: 18, padTop: 16, padBottom: 34 };
@@ -147,6 +148,8 @@ export function TimelineDemo({ t }: { t: Dictionary }) {
         <span className="key cone">{tl.legend.cone}</span>
       </div>
 
+      <p className="chart-caption">{t.demos.live.illustrative}</p>
+
       <div className="timeline-stats">
         <span>
           {tl.stats.planned} <b>{plannedNow.toFixed(0)}%</b>
@@ -173,6 +176,8 @@ export function TimelineDemo({ t }: { t: Dictionary }) {
           <b>{p10Finish != null ? `${tl.stats.day} ${p10Finish.toFixed(0)}` : '—'}</b>
         </span>
       </div>
+
+      <LiveForecast t={t} />
     </div>
   );
 }

@@ -32,6 +32,28 @@ either drop demand or damage the enterprise positioning.
 Verify the contact path end-to-end in the production environment after the first
 deploy — submit a real request and confirm it arrives.
 
+## Live demo wiring
+
+`NEXT_PUBLIC_TWIN_DEMO_API` points the Ask Twin panel and the forecast strip at
+the Construction Twin public demo endpoint. When it is set and reachable, both
+upgrade to live product output after the page has rendered; when it is unset,
+unreachable, timing out or rate-limiting the visitor, the site keeps showing its
+representative sample data. The layout is identical either way, so an endpoint
+outage is invisible to visitors and never blocks a page.
+
+To enable it:
+
+1. On the Twin deployment, seed the demo project and set `PUBLIC_DEMO_ENABLED`
+   and `PUBLIC_DEMO_PROJECT_ID` (see the product repo's `docs/PUBLIC_DEMO.md`).
+2. Add this site's origin to the Twin's `CORS_ORIGINS`.
+3. Set `NEXT_PUBLIC_TWIN_DEMO_API=https://<twin-host>/api/v1/public/demo` here.
+
+The panel labels its own source: a green `LIVE` badge when the answer came from
+the running product, `SAMPLE` otherwise. Provenance is rendered from whatever
+the API reports — including `model_backed: false` when the deployment has no
+model gateway configured. Do not override that: a demo claiming reasoning it did
+not use would undercut the evidence policy the page exists to demonstrate.
+
 ## Optional
 
 | Item | Effect |

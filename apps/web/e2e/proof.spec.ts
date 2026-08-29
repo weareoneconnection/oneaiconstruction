@@ -95,3 +95,39 @@ test.describe('Ask Twin mirrors the product contract', () => {
     await expect(page.getByText(/不得作为合同决策的依据/)).toBeVisible();
   });
 });
+
+test.describe('live demo wiring degrades safely', () => {
+  test('with no endpoint configured the demo shows sample data and works', async ({ page }) => {
+    // NEXT_PUBLIC_TWIN_DEMO_API is unset in the test build, which is the
+    // shipped default. The panel must be fully functional anyway.
+    await page.goto('/en/products/construction-twin');
+
+    await expect(page.locator('.source-badge')).toHaveText('SAMPLE');
+    await expect(page.locator('.source-badge')).not.toHaveClass(/is-live/);
+
+    // The static answer, its claims and its evidence still work.
+    await expect(page.locator('.claim-list li')).toHaveCount(4);
+    await page.getByRole('button', { name: 'DR-241' }).click();
+    await expect(page.locator('.evidence-card')).toBeVisible();
+
+    // The live-only forecast strip is absent rather than empty or broken.
+    await expect(page.locator('.live-forecast')).toHaveCount(0);
+  });
+
+  test('the interactive chart is labelled as an illustration', async ({ page }) => {
+    await page.goto('/en/products/construction-twin');
+    await expect(page.getByText('Interactive illustration')).toBeVisible();
+  });
+
+  test('a dead endpoint does not break the page', async ({ page }) => {
+    // Simulate a configured-but-unreachable endpoint by failing every call the
+    // client could make.
+    await page.route('**/api/v1/public/demo/**', (route) => route.abort());
+
+    await page.goto('/en/products/construction-twin');
+
+    await expect(page.locator('.source-badge')).toHaveText('SAMPLE');
+    await expect(page.locator('.answer-summary')).toBeVisible();
+    await expect(page.locator('.provenance')).toBeVisible();
+  });
+});

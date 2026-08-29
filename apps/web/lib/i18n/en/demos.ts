@@ -52,6 +52,8 @@ export const demos = {
     noEvidence: 'No matching record',
     provenanceNote:
       'The product reports these fields on every answer. This demo shows the same ones.',
+    evidenceLabel: 'Evidence',
+    liveBasis: 'Answered live against the demo project, from {count} retrieved records.',
     evidenceTypes: {
       'Daily Report': 'Daily Report',
       'Delivery Record': 'Delivery Record',
@@ -65,6 +67,25 @@ export const demos = {
     }
   },
 
+  live: {
+    badge: 'LIVE',
+    badgeTitle: 'Answered by the running product, not a scripted demo',
+    staticBadge: 'SAMPLE',
+    staticTitle: 'Representative data. The live demo endpoint is not reachable from here.',
+    loading: 'Asking the project…',
+    forecastTitle: 'Live from the demo project',
+    forecastCaption:
+      'Current P10/P50/P90 delay in days, computed by the running product on the seeded demo project.',
+    calibrated: 'Calibrated',
+    uncalibrated: 'Uncalibrated',
+    sample: 'sample',
+    illustrative:
+      'Interactive illustration — drag the data date to see how a forecast cone responds.',
+    p10: 'P10',
+    p50: 'P50',
+    p90: 'P90',
+    days: 'd'
+  },
   timeline: {
     eyebrow: '4D PROJECT INTELLIGENCE',
     title: 'Baseline · Actual · Forecast range',

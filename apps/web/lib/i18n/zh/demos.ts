@@ -50,6 +50,8 @@ export const demos = {
     activities: '条活动',
     noEvidence: '无匹配记录',
     provenanceNote: '产品在每个答案上都会报告这些字段。本演示展示的是同样的字段。',
+    evidenceLabel: '证据',
+    liveBasis: '基于演示项目实时作答，检索到 {count} 条记录。',
     evidenceTypes: {
       'Daily Report': '施工日志',
       'Delivery Record': '到货记录',
@@ -63,6 +65,23 @@ export const demos = {
     }
   },
 
+  live: {
+    badge: '实时',
+    badgeTitle: '由运行中的产品回答，而非预设脚本',
+    staticBadge: '示例',
+    staticTitle: '代表性数据。当前无法连接实时演示端点。',
+    loading: '正在向项目提问…',
+    forecastTitle: '来自演示项目的实时数据',
+    forecastCaption: '当前 P10/P50/P90 延误天数，由运行中的产品在已播种的演示项目上计算得出。',
+    calibrated: '已校准',
+    uncalibrated: '未校准',
+    sample: '样本',
+    illustrative: '交互式示意 —— 拖动数据日期，观察预测区间如何变化。',
+    p10: 'P10',
+    p50: 'P50',
+    p90: 'P90',
+    days: '天'
+  },
   timeline: {
     eyebrow: '4D 项目智能',
     title: '基线 · 实际 · 预测区间',
