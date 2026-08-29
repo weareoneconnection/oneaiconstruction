@@ -1,0 +1,15 @@
+/*
+ * Global stylesheet, assembled from layers.
+ *
+ * Previously this was a single 13 KB minified line, which made every edit a
+ * merge hazard. Order matters: tokens define the vocabulary, base sets the
+ * ground rules, and responsive overrides come last.
+ */
+
+@import './../styles/tokens.css';
+@import './../styles/base.css';
+@import './../styles/chrome.css';
+@import './../styles/components.css';
+@import './../styles/twin.css';
+@import './../styles/pages.css';
+@import './../styles/responsive.css';

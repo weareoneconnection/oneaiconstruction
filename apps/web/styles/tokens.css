@@ -1,0 +1,50 @@
+/* Design tokens. Nothing below this file should hardcode a colour or a radius. */
+
+:root {
+  /* Ground */
+  --bg: #070a0e;
+  --bg-raised: #090e14;
+  --surface: #0f151d;
+  --surface-2: #121a24;
+  --surface-sunken: #080d12;
+
+  /* Type */
+  --text: #f6f8fb;
+  --text-soft: #c4cdd7;
+  --muted: #a7b4c2;
+  --muted-dim: #7f8f9f;
+
+  /* Lines */
+  --line: rgba(255, 255, 255, 0.11);
+  --line-soft: rgba(255, 255, 255, 0.055);
+  --line-strong: rgba(255, 255, 255, 0.2);
+
+  /* Accents */
+  --cyan: #37d8ff;
+  --cyan-bright: #74eeff;
+  --blue: #4a82ff;
+  --green: #4ce2a2;
+  --amber: #ffc15a;
+  --red: #ff6b7a;
+
+  /* Accent washes */
+  --cyan-wash: rgba(55, 216, 255, 0.06);
+  --cyan-edge: rgba(55, 216, 255, 0.28);
+
+  /* Elevation and shape */
+  --shadow: 0 30px 80px rgba(0, 0, 0, 0.35);
+  --shadow-sm: 0 10px 30px rgba(55, 216, 255, 0.15);
+  --radius: 22px;
+  --radius-md: 18px;
+  --radius-sm: 12px;
+
+  /* Rhythm */
+  --section-y: 104px;
+  --section-y-tight: 76px;
+
+  /* Motion */
+  --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --font-sans:
+    var(--font-inter), ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
+    sans-serif;
+}

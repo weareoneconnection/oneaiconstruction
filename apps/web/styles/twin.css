@@ -1,0 +1,687 @@
+/* Twin scene, Ask Twin demo and the forecast chart. */
+
+.twin-card {
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  overflow: hidden;
+  background: linear-gradient(180deg, #0d141d, #080c11);
+  box-shadow: var(--shadow);
+}
+
+.twin-topbar {
+  height: 46px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  border-bottom: 1px solid var(--line);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  color: #8ea0b2;
+}
+
+.live-dot {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--green);
+}
+
+.live-dot i {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 0 0 rgba(76, 226, 162, 0.6);
+  animation: pulse 2.4s infinite;
+}
+
+@keyframes pulse {
+  70% {
+    box-shadow: 0 0 0 7px rgba(76, 226, 162, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(76, 226, 162, 0);
+  }
+}
+
+.twin-grid {
+  display: grid;
+  grid-template-columns: 1.6fr 0.85fr;
+  min-height: 470px;
+}
+
+/* --- 3D canvas ---------------------------------------------------------- */
+
+.twin-canvas {
+  position: relative;
+  overflow: hidden;
+}
+
+.twin-svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  cursor: grab;
+  touch-action: pan-y;
+}
+
+.twin-svg.is-dragging {
+  cursor: grabbing;
+}
+
+.twin-ground line {
+  stroke: rgba(255, 255, 255, 0.05);
+  stroke-width: 1;
+}
+
+.twin-zone {
+  cursor: pointer;
+}
+
+.twin-zone .face {
+  stroke: rgba(55, 216, 255, 0.4);
+  stroke-width: 1;
+  stroke-linejoin: round;
+  transition:
+    fill 0.2s var(--ease),
+    stroke 0.2s var(--ease);
+}
+
+.twin-zone .face-top {
+  fill: rgba(55, 216, 255, 0.3);
+}
+
+.twin-zone .face-left {
+  fill: rgba(55, 216, 255, 0.19);
+}
+
+.twin-zone .face-right {
+  fill: rgba(55, 216, 255, 0.11);
+}
+
+.twin-zone.status-complete .face {
+  stroke: rgba(76, 226, 162, 0.5);
+}
+.twin-zone.status-complete .face-top {
+  fill: rgba(76, 226, 162, 0.3);
+}
+.twin-zone.status-complete .face-left {
+  fill: rgba(76, 226, 162, 0.19);
+}
+.twin-zone.status-complete .face-right {
+  fill: rgba(76, 226, 162, 0.11);
+}
+
+.twin-zone.status-delayed .face {
+  stroke: rgba(255, 107, 122, 0.65);
+}
+.twin-zone.status-delayed .face-top {
+  fill: rgba(255, 107, 122, 0.32);
+}
+.twin-zone.status-delayed .face-left {
+  fill: rgba(255, 107, 122, 0.2);
+}
+.twin-zone.status-delayed .face-right {
+  fill: rgba(255, 107, 122, 0.12);
+}
+
+.twin-zone.status-planned .face {
+  stroke: rgba(154, 168, 183, 0.35);
+}
+.twin-zone.status-planned .face-top {
+  fill: rgba(154, 168, 183, 0.16);
+}
+.twin-zone.status-planned .face-left {
+  fill: rgba(154, 168, 183, 0.1);
+}
+.twin-zone.status-planned .face-right {
+  fill: rgba(154, 168, 183, 0.06);
+}
+
+.twin-zone:hover .face,
+.twin-zone.is-selected .face {
+  stroke: var(--cyan);
+  stroke-width: 1.6;
+}
+
+.twin-zone.is-selected .face-top {
+  fill: rgba(55, 216, 255, 0.34);
+}
+
+.zone-label {
+  fill: #dff6ff;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  pointer-events: none;
+}
+
+.twin-controls {
+  position: absolute;
+  left: 14px;
+  bottom: 14px;
+  display: flex;
+  gap: 6px;
+}
+
+.twin-controls button {
+  min-width: 32px;
+  height: 30px;
+  padding: 0 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: rgba(8, 13, 18, 0.8);
+  color: var(--muted);
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.twin-controls button:hover {
+  color: var(--cyan);
+  border-color: var(--cyan-edge);
+}
+
+.twin-hint {
+  position: absolute;
+  right: 14px;
+  bottom: 18px;
+  margin: 0;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  color: #4f6070;
+  pointer-events: none;
+}
+
+/* --- Twin side panel ---------------------------------------------------- */
+
+.twin-panel {
+  padding: 22px;
+  border-left: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.015);
+}
+
+.twin-panel h3 {
+  margin: 8px 0 20px;
+  font-size: 22px;
+}
+
+.metric {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  border-bottom: 1px solid var(--line);
+  padding: 10px 0;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.metric strong {
+  color: var(--text);
+}
+
+.progress {
+  height: 4px;
+  background: #1a2530;
+  border-radius: 999px;
+  margin: 20px 0 16px;
+  overflow: hidden;
+}
+
+.progress i {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, var(--cyan), var(--green));
+  border-radius: 999px;
+  transition: width 0.35s var(--ease);
+}
+
+.twin-activity {
+  font-size: 12px;
+  color: var(--muted-dim);
+  margin: 0 0 14px;
+}
+
+.twin-evidence {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.twin-evidence span {
+  width: 100%;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  color: var(--muted-dim);
+  margin-bottom: 2px;
+}
+
+.twin-evidence i {
+  font-style: normal;
+  font-size: 10px;
+  padding: 5px 8px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--text-soft);
+}
+
+.zone-switch {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.zone-switch button {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.zone-switch button.is-active {
+  border-color: var(--cyan-edge);
+  background: var(--cyan-wash);
+  color: var(--cyan);
+}
+
+/* --- Ask Twin ----------------------------------------------------------- */
+
+.ask-demo {
+  display: grid;
+  grid-template-columns: 0.68fr 1.32fr;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--surface);
+}
+
+.ask-selector {
+  padding: 20px;
+  border-right: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: #0a0f15;
+}
+
+.ask-selector button {
+  padding: 15px;
+  text-align: left;
+  border-radius: var(--radius-sm);
+  border: 1px solid transparent;
+  background: transparent;
+  color: #9fadb9;
+  cursor: pointer;
+  transition:
+    background 0.2s var(--ease),
+    color 0.2s var(--ease);
+}
+
+.ask-selector button:hover {
+  color: var(--text);
+}
+
+.ask-selector button.active {
+  border-color: var(--cyan-edge);
+  background: var(--cyan-wash);
+  color: var(--text);
+}
+
+.ask-note {
+  margin: auto 0 0;
+  font-size: 12px;
+  color: var(--muted-dim);
+  line-height: 1.6;
+}
+
+.answer-panel {
+  padding: 32px;
+}
+
+.answer-head {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  color: var(--cyan);
+}
+
+.answer-head strong {
+  color: var(--green);
+}
+
+.answer-summary {
+  font-size: 21px;
+  line-height: 1.45;
+  margin: 24px 0 28px;
+  color: #e5ebf1;
+}
+
+.claim-list {
+  list-style: none;
+  counter-reset: claim;
+  padding: 0;
+  margin: 0 0 24px;
+  border-top: 1px solid var(--line);
+}
+
+.claim-list > li {
+  counter-increment: claim;
+  padding: 18px 0 18px 34px;
+  border-bottom: 1px solid var(--line-soft);
+  position: relative;
+}
+
+.claim-list > li::before {
+  content: counter(claim, decimal-leading-zero);
+  position: absolute;
+  left: 0;
+  top: 19px;
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--cyan);
+}
+
+.claim-list p {
+  margin: 0 0 10px;
+  font-size: 15px;
+  color: var(--text-soft);
+  line-height: 1.6;
+}
+
+.claim-evidence {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.evidence-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  padding: 6px 10px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--text-soft);
+  cursor: pointer;
+  transition:
+    border-color 0.2s var(--ease),
+    background 0.2s var(--ease);
+}
+
+.evidence-chip:hover {
+  border-color: var(--cyan-edge);
+  color: var(--cyan);
+}
+
+.evidence-chip.is-open {
+  border-color: var(--cyan);
+  background: var(--cyan-wash);
+  color: var(--cyan);
+}
+
+.evidence-chip .dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--cyan);
+}
+
+.evidence-card {
+  margin-top: 12px;
+  padding: 16px;
+  border: 1px solid var(--cyan-edge);
+  border-radius: var(--radius-sm);
+  background: rgba(55, 216, 255, 0.04);
+}
+
+.evidence-card-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+
+.evidence-card-head strong {
+  color: var(--cyan);
+  font-size: 13px;
+  letter-spacing: 0;
+}
+
+.weight {
+  padding: 3px 7px;
+  border-radius: 999px;
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  border: 1px solid var(--line);
+}
+
+.weight-primary {
+  color: var(--green);
+  border-color: rgba(76, 226, 162, 0.35);
+}
+
+.weight-supporting {
+  color: var(--muted);
+}
+
+.evidence-excerpt {
+  margin: 12px 0;
+  font-size: 13px;
+  line-height: 1.65;
+  color: var(--text-soft);
+}
+
+.evidence-card-foot {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 11px;
+  color: var(--muted-dim);
+  border-top: 1px solid var(--line-soft);
+  padding-top: 10px;
+}
+
+.unsupported {
+  padding: 14px 16px;
+  border-left: 2px solid var(--amber);
+  background: rgba(255, 193, 90, 0.05);
+  font-size: 13px;
+  color: var(--text-soft);
+  line-height: 1.6;
+  margin: 0 0 18px;
+}
+
+.unsupported strong {
+  color: var(--amber);
+}
+
+.confidence-basis {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.65;
+  margin: 0 0 20px;
+}
+
+.confidence-basis strong {
+  color: var(--text-soft);
+}
+
+.recommendation {
+  padding: 18px;
+  border-radius: 14px;
+  background: var(--cyan-wash);
+  border: 1px solid rgba(55, 216, 255, 0.15);
+}
+
+.recommendation span,
+.recommendation strong {
+  display: block;
+}
+
+.recommendation span {
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+}
+
+.recommendation strong {
+  margin-top: 6px;
+  color: var(--cyan);
+}
+
+/* --- Forecast chart ----------------------------------------------------- */
+
+.timeline-card {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  padding: 30px;
+}
+
+.timeline-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.timeline-head h3 {
+  font-size: 28px;
+  margin: 10px 0 0;
+}
+
+.timeline-slider {
+  display: block;
+  margin: 22px 0 8px;
+}
+
+.timeline-slider input {
+  width: 100%;
+  accent-color: var(--cyan);
+}
+
+.chart-wrap {
+  overflow-x: auto;
+}
+
+.forecast-chart {
+  display: block;
+  width: 100%;
+  min-width: 520px;
+  height: auto;
+}
+
+.chart-grid line {
+  stroke: rgba(255, 255, 255, 0.06);
+  stroke-width: 1;
+}
+
+.chart-grid text {
+  fill: var(--muted-dim);
+  font-size: 10px;
+}
+
+.cone {
+  fill: rgba(76, 226, 162, 0.13);
+  stroke: none;
+}
+
+.curve {
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.curve.baseline {
+  stroke: #526579;
+  stroke-dasharray: 5 5;
+}
+
+.curve.actual {
+  stroke: var(--cyan);
+  stroke-width: 2.6;
+}
+
+.curve.p50 {
+  stroke: var(--green);
+}
+
+.data-date {
+  stroke: rgba(55, 216, 255, 0.4);
+  stroke-width: 1;
+  stroke-dasharray: 3 4;
+}
+
+.actual-dot {
+  fill: var(--cyan);
+  stroke: #071018;
+  stroke-width: 2;
+}
+
+.chart-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+  margin-top: 14px;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.chart-legend .key {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.chart-legend .key::before {
+  content: '';
+  width: 14px;
+  height: 3px;
+  border-radius: 2px;
+}
+
+.chart-legend .baseline::before {
+  background: #526579;
+}
+.chart-legend .actual::before {
+  background: var(--cyan);
+}
+.chart-legend .p50::before {
+  background: var(--green);
+}
+.chart-legend .cone::before {
+  background: rgba(76, 226, 162, 0.3);
+  height: 10px;
+  border-radius: 3px;
+}
+
+.timeline-stats {
+  display: flex;
+  gap: 26px;
+  flex-wrap: wrap;
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.timeline-stats b {
+  color: var(--text);
+  margin-left: 8px;
+}
