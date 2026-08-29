@@ -103,7 +103,8 @@ export const zh: AskTwinContent = {
       confidence: 89,
       confidenceBasis:
         '四条独立记录，其中三条为直接证据，且全部落在偏差发生的时间窗内。未发现相互矛盾的证据。',
-      recommendation: '与项目总监一同评审缓解方案 S-04'
+      recommendation: '与项目总监一同评审缓解方案 S-04',
+      reasoning: { modelBacked: true, mode: 'model-backed', retrieval: 'bm25', sampleSize: 42 }
     },
     {
       question: '当前的工期风险有多大？',
@@ -124,6 +125,7 @@ export const zh: AskTwinContent = {
       confidenceBasis:
         '模型运算是最新的（8 月 28 日），其驱动因素均可回溯到直接证据。置信度被压在 90 以下，是因为围护结构的敞口仅依赖单一份进度更新。',
       recommendation: '将连接板到货周期上报至采购评审',
+      reasoning: { modelBacked: true, mode: 'model-backed', retrieval: 'bm25', sampleSize: 42 },
       unsupported:
         '未发现任何将机电标段与此敞口关联起来的证据。任何关于下游机电受影响的说法目前都缺乏证据支撑。'
     },
@@ -141,7 +143,24 @@ export const zh: AskTwinContent = {
       confidence: 81,
       confidenceBasis:
         '方案是基于当前项目状态建模的，但塔吊可用性是单一来源的说法，且该时间窗在 9 月 2 日关闭。',
-      recommendation: '发布缓解计划前需人工批准'
+      recommendation: '发布缓解计划前需人工批准',
+      reasoning: { modelBacked: true, mode: 'model-backed', retrieval: 'bm25', sampleSize: 42 }
+    },
+    {
+      question: '机电标段会受影响吗？',
+      summary: '项目中没有任何记录匹配该问题，因此本响应为暂定结论，不得作为合同决策的依据。',
+      claims: [],
+      confidence: 40,
+      confidenceBasis:
+        '因为检索没有返回任何匹配记录，置信度被封顶在 0.4。这个上限由推理服务强制执行，而不是交给模型自己判断。',
+      recommendation: '接入机电标段的记录后再提问',
+      provisional: true,
+      reasoning: {
+        modelBacked: true,
+        mode: 'model-backed',
+        retrieval: 'bm25',
+        sampleSize: 0
+      }
     }
   ]
 };

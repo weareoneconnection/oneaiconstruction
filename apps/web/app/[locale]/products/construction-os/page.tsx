@@ -58,11 +58,15 @@ export default async function OSPage({ params }: { params: Promise<{ locale: str
       </Section>
 
       <Section
-        eyebrow={p.worksWith.eyebrow}
-        title={p.worksWith.title}
-        copy={p.worksWith.copy}
+        eyebrow={p.smartSiteEyebrow}
+        title={p.smartSiteTitle}
+        copy={p.smartSiteCopy}
         tone="raised"
       >
+        <FeatureGrid items={p.smartSiteItems} />
+      </Section>
+
+      <Section eyebrow={p.worksWith.eyebrow} title={p.worksWith.title} copy={p.worksWith.copy}>
         <div className="data-flow">
           {p.worksWith.inputs.map((input, index) => (
             <span key={input} style={{ display: 'contents' }}>
@@ -75,6 +79,11 @@ export default async function OSPage({ params }: { params: Promise<{ locale: str
           <span aria-hidden="true">→</span>
           <em>{p.worksWith.output}</em>
         </div>
+        <p className="table-note">
+          <Link className="inline-link" href={localePath(locale, '/integrations')}>
+            {p.integrationsLink}
+          </Link>
+        </p>
       </Section>
     </>
   );

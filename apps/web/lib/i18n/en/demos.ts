@@ -42,6 +42,16 @@ export const demos = {
     recommendedAction: 'Recommended action',
     weightPrimary: 'primary',
     weightSupporting: 'supporting',
+    provisionalBadge: 'PROVISIONAL',
+    provenance: 'Provenance',
+    modelBacked: 'Model-backed',
+    localReasoner: 'Local reasoner',
+    retrievalLabel: 'Retrieval',
+    sampleLabel: 'Schedule sample',
+    activities: 'activities',
+    noEvidence: 'No matching record',
+    provenanceNote:
+      'The product reports these fields on every answer. This demo shows the same ones.',
     evidenceTypes: {
       'Daily Report': 'Daily Report',
       'Delivery Record': 'Delivery Record',

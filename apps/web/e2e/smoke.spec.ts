@@ -7,6 +7,7 @@ const ROUTES = [
   '/products/construction-twin',
   '/solutions',
   '/platform',
+  '/integrations',
   '/industries',
   '/enterprise',
   '/security',

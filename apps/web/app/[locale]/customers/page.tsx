@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import { FeatureGrid } from '../../../components/FeatureGrid';
 import { JsonLd } from '../../../components/JsonLd';
 import { Section } from '../../../components/Section';
 import { getDictionary } from '../../../lib/i18n/dictionaries';
@@ -18,7 +19,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   });
 }
 
-export default async function CustomersPage({ params }: { params: Promise<{ locale: string }> }) {
+export default async function ProofPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
   if (!isLocale(locale)) notFound();
   const t = getDictionary(locale);
@@ -41,49 +42,66 @@ export default async function CustomersPage({ params }: { params: Promise<{ loca
         </div>
       </section>
 
+      <Section eyebrow={p.metricsEyebrow} title={p.metricsTitle} copy={p.metricsCopy} tone="raised">
+        <div className="compare-table-wrap">
+          <table className="compare-table tolerance-table">
+            <caption className="visually-hidden">{p.metricsTitle}</caption>
+            <thead>
+              <tr>
+                <th scope="col">{p.toleranceHeaders.kind}</th>
+                <th scope="col">{p.toleranceHeaders.tolerance}</th>
+                <th scope="col">{p.toleranceHeaders.where}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {p.tolerances.map((row) => (
+                <tr key={row.kind}>
+                  <th scope="row">{row.kind}</th>
+                  <td className="tolerance-value">{row.tolerance}</td>
+                  <td>{row.where}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p className="table-note">{p.tolerancesNote}</p>
+      </Section>
+
+      <Section eyebrow={p.evidenceEyebrow} title={p.evidenceTitle} copy={p.evidenceCopy}>
+        <FeatureGrid
+          items={p.evidenceItems.map((item, index) => ({
+            ...item,
+            tag: String(index + 1).padStart(2, '0')
+          }))}
+        />
+      </Section>
+
       <section className="metric-strip">
+        <div className="container">
+          <div className="section-heading">
+            <span className="eyebrow">{p.validationEyebrow}</span>
+            <h2>{p.validationTitle}</h2>
+            <p>{p.validationCopy}</p>
+          </div>
+        </div>
         <div className="container metric-strip-grid">
-          {p.metrics.map((metric) => (
-            <div key={metric.label}>
-              <strong>{metric.value}</strong>
-              <span>{metric.label}</span>
+          {p.validationItems.map((item) => (
+            <div key={item.label}>
+              <strong>{item.value}</strong>
+              <span>{item.label}</span>
             </div>
           ))}
         </div>
       </section>
 
-      <Section eyebrow={p.casesEyebrow} title={p.casesTitle} copy={p.casesCopy}>
-        <div className="case-list">
-          {p.cases.map((study) => (
-            <article className="case-card" key={study.slug} id={study.slug}>
-              <div className="case-head">
-                <span className="tag">{study.sector}</span>
-                <h3>{study.title}</h3>
-                <p className="case-scope">{study.scope}</p>
-              </div>
-
-              <div className="case-body">
-                <div>
-                  <h4>{p.labels.challenge}</h4>
-                  <p>{study.challenge}</p>
-                </div>
-                <div>
-                  <h4>{p.labels.approach}</h4>
-                  <p>{study.approach}</p>
-                </div>
-                <div>
-                  <h4>{p.labels.outcome}</h4>
-                  <ul>
-                    {study.outcomes.map((outcome) => (
-                      <li key={outcome}>{outcome}</li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-
-              <p className="case-disclosure">{study.disclosure}</p>
-            </article>
-          ))}
+      <Section eyebrow={p.limitsEyebrow} title={p.limitsTitle} copy={p.limitsCopy}>
+        <div className="hero-actions">
+          <Link className="button secondary" href={localePath(locale, '/security')}>
+            {t.enterprise.securityLink} →
+          </Link>
+          <Link className="button secondary" href={localePath(locale, '/contact')}>
+            {t.nav.bookDemo} →
+          </Link>
         </div>
       </Section>
 

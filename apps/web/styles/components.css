@@ -644,3 +644,39 @@
   margin-right: 10px;
   margin-top: 20px;
 }
+
+/* Signal strip entries link into the page that proves each claim. */
+.signal-grid > a {
+  display: block;
+  padding: 22px 28px;
+  border-right: 1px solid var(--line);
+  transition: background 0.2s var(--ease);
+}
+
+.signal-grid > a:last-of-type {
+  border-right: 0;
+}
+
+.signal-grid > a:hover {
+  background: rgba(55, 216, 255, 0.04);
+}
+
+.signal-grid > a strong,
+.signal-grid > a span {
+  display: block;
+}
+
+.signal-grid > a strong {
+  font-size: 13px;
+}
+
+.signal-grid > a span {
+  color: var(--muted);
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+.signal-foot {
+  padding: 0 28px 22px;
+  font-size: 13px;
+}

@@ -6,7 +6,7 @@ export function primaryNav(t: Dictionary) {
     { label: t.nav.products, href: '/products' },
     { label: t.nav.solutions, href: '/solutions' },
     { label: t.nav.platform, href: '/platform' },
-    { label: t.nav.industries, href: '/industries' },
+    { label: t.nav.integrations, href: '/integrations' },
     { label: t.nav.enterprise, href: '/enterprise' },
     { label: t.nav.customers, href: '/customers' },
     { label: t.nav.resources, href: '/resources' }
@@ -21,6 +21,7 @@ export function footerNav(t: Dictionary) {
         { label: t.footer.links.constructionOs, href: '/products/construction-os' },
         { label: t.footer.links.constructionTwin, href: '/products/construction-twin' },
         { label: t.footer.links.platform, href: '/platform' },
+        { label: t.footer.links.integrations, href: '/integrations' },
         { label: t.footer.links.pricing, href: '/pricing' }
       ]
     },

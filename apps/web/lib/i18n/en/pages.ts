@@ -36,53 +36,71 @@ export const pages = {
     meta: {
       title: 'Construction OS',
       description:
-        'The operating system for construction intelligence. Connect document intelligence, project knowledge, governed workflows and construction agents without replacing the systems your teams already use.'
+        'The operating system for construction delivery: commercial control, schedule, documents, QA/QC, HSE, field and smart site — with governed AI agents and a verifiable audit trail across all of it.'
     },
     eyebrow: 'CONSTRUCTION OS',
-    h1: 'The operating system for construction intelligence.',
-    lede: 'Connect project knowledge, workflows and agents without replacing the systems your teams already rely on.',
+    h1: 'One system for how the project actually runs.',
+    lede: 'Contracts, budget, procurement, schedule, documents, quality, safety and field work in one governed platform — connected to the systems you already use, not replacing them.',
     openProduct: 'Open Construction OS',
-    capabilitiesEyebrow: 'CAPABILITIES',
-    capabilitiesTitle: 'Turn project coordination into structured intelligence.',
+    capabilitiesEyebrow: 'MODULES',
+    capabilitiesTitle: 'What is in the platform.',
     capabilities: [
       {
-        title: 'Document Intelligence',
-        text: 'Connect drawings, method statements, RFIs, NCRs and inspection records, with revision awareness so a superseded document is never cited as current.'
+        title: 'Commercial control',
+        text: 'Contracts, payments, claims, change orders, procurement packages and budget lines, with cost forecast snapshots that feed the same intelligence layer as the schedule.'
       },
       {
-        title: 'Project Knowledge',
-        text: 'A persistent context layer across projects, people and decisions that survives handover and staff turnover.'
+        title: 'Schedule & controls',
+        text: 'Native Primavera P6 XER and MS Project XML import, activity tracking, and slippage surfaced against the approved baseline.'
       },
       {
-        title: 'Workflow Automation',
-        text: 'Route tasks, approvals and follow-up actions through governed AI workflows with explicit policy boundaries.'
+        title: 'Document intelligence',
+        text: 'Document intake with OCR, line-level BOQ comparison between two parsed documents, evidence extraction, revision tracking and full document lineage.'
       },
       {
-        title: 'Construction Agents',
-        text: 'Specialised agents for planning, QA/QC, reporting and project controls, scoped to the permissions of their principal.'
+        title: 'Quality, safety & risk',
+        text: 'QA/QC issues, safety observations, field inspections, corrective actions with follow-up, and a risk centre that ties them back to schedule and cost.'
       },
       {
-        title: 'Human Approval',
-        text: 'Accountable decisions stay under explicit human control, with the evidence set recorded at the moment of approval.'
+        title: 'Field & smart site',
+        text: 'Mobile field capture that works offline with electronic signatures, plus site cameras, AI-detected video events and environmental readings against thresholds.'
       },
       {
-        title: 'Audit Trail',
-        text: 'Preserve who decided what, on which evidence, and what happened next — exportable for claims and disputes.'
+        title: 'Governed AI & approvals',
+        text: 'Multi-stage approval policies, an action centre, execution logs, and AI recommendations that always arrive as pending approval for a named human.'
+      }
+    ],
+    smartSiteEyebrow: 'SMART SITE',
+    smartSiteTitle: 'The site itself becomes a source of evidence.',
+    smartSiteCopy:
+      'Cameras and sensors are not a separate dashboard. A detected event carries its confidence, an AI summary and a suggested action, and is routed into the module that owns it — so a safety observation becomes a corrective action with the footage attached.',
+    smartSiteItems: [
+      {
+        title: 'Site cameras',
+        text: 'Zone-mapped cameras with stream and snapshot capture, health status and last-seen tracking.'
+      },
+      {
+        title: 'AI video events',
+        text: 'Detected events carry type, severity, confidence, an AI summary and a suggested action, routed to the owning module.'
+      },
+      {
+        title: 'Environmental readings',
+        text: 'Metrics captured against thresholds per zone, with status derived from the threshold rather than eyeballed.'
+      },
+      {
+        title: 'Offline field capture',
+        text: 'Daily reports, inspections and attachments recorded offline with electronic signatures, then synced when the device reconnects.'
       }
     ],
     worksWith: {
       eyebrow: 'WORKS WITH',
       title: 'An intelligence layer, not another silo.',
-      copy: 'Construction OS reads from the systems already in place and writes back through governed workflows.',
-      inputs: [
-        'Common Data Environment',
-        'Document Control',
-        'Field Reporting',
-        'ERP / Commercial'
-      ],
+      copy: 'Construction OS reads from the systems already in place and writes results back through governed workflows.',
+      inputs: ['Procore', 'Autodesk ACC', 'Primavera P6', 'SharePoint · ERP'],
       brand: 'CONSTRUCTION OS',
       output: 'Governed action'
-    }
+    },
+    integrationsLink: 'See the full connector catalog →'
   },
 
   twin: {
@@ -109,28 +127,40 @@ export const pages = {
     capabilitiesTitle: 'What the Twin holds.',
     capabilities: [
       {
-        title: 'IFC / BIM Ingestion',
-        text: 'Geometry, spatial hierarchy and component metadata as first-class entities.'
+        title: 'IFC / BIM ingestion',
+        text: 'IFC semantic ingestion with IfcOpenShell, and a transparent fallback parser that labels its own reduced fidelity rather than hiding it.'
       },
       {
-        title: '4D Schedule Link',
-        text: 'Activities bound to entities, with baseline, actual and forecast state per element.'
+        title: '3D Tiles & LOD streaming',
+        text: 'IFC converted to GLB and 3D Tiles 1.1, with LOD0/1/2 and Cesium spatial streaming for models too large to load whole.'
       },
       {
-        title: 'Evidence Graph',
-        text: 'Daily reports, inspections, deliveries and photographs linked to the entities they describe.'
+        title: 'Distributed asset pipeline',
+        text: 'Conversion runs as partitioned jobs with worker leases, cancel and resume, and a content-addressed cache that skips work already done.'
       },
       {
-        title: 'Risk Intelligence',
-        text: 'Quantified exposure with drivers traced back to the records that produced them.'
+        title: '4D schedule link',
+        text: 'Activities bound to entities, with baseline, actual and forecast state per element, and an S-curve derived from the schedule itself.'
       },
       {
-        title: 'Probabilistic Forecast',
-        text: 'P10 / P50 / P90 outcome ranges rather than a single indefensible date.'
+        title: 'Portfolio & comparison',
+        text: 'A portfolio view across projects and a side-by-side comparison workspace, not just a single-project dashboard.'
       },
       {
-        title: 'Scenario Simulation',
-        text: 'Compare recovery options as costed forecast curves before committing to one.'
+        title: 'Verifiable audit trail',
+        text: 'Observations, recommendations, approvals and executions written to a hash-chained log, with an endpoint that re-walks the chain and reports the first break.'
+      },
+      {
+        title: 'Realtime & offline',
+        text: 'Live project events over WebSocket with Redis fan-out across replicas, and a cached shell that keeps working offline, queueing comments until reconnect.'
+      },
+      {
+        title: 'Evidence-backed reasoning',
+        text: 'BM25 retrieval over project records, derived claims, verified citations, and an enforced downgrade when nothing matches.'
+      },
+      {
+        title: 'Probabilistic forecast',
+        text: 'P10/P50/P90 computed from measured activity slippage, each result reporting its model, sample size and calibration state.'
       }
     ]
   },

@@ -176,6 +176,89 @@ export const pages3 = {
     notFound: '未找到'
   },
 
+  integrations: {
+    meta: {
+      title: '集成',
+      description:
+        '与 Procore、Autodesk Construction Cloud、Primavera P6 的双向连接器，以及 SharePoint、Google Drive、Outlook、Gmail 与 ERP —— 支持增量同步与回写。'
+    },
+    eyebrow: '集成',
+    h1: '接上你已经在用的系统。',
+    lede: 'OneAI Construction 是一个智能层，而智能层只有在能读取团队今天真正在用的系统时才成立。在源平台允许的前提下，连接器是双向的，支持增量同步，并且会把结果回写，而不是让它们滞留在这里。',
+    ctaPrimary: '聊聊你的技术栈',
+    ctaSecondary: '了解平台',
+    catalogEyebrow: '连接器目录',
+    catalogTitle: '今天已经交付的部分。',
+    catalogCopy:
+      '每个连接器都声明了同步方向、供给的模块与流转的对象。本页没有任何一项是路线图内容。',
+    headers: {
+      connector: '连接器',
+      auth: '认证',
+      direction: '方向',
+      modules: '供给模块'
+    },
+    categories: {
+      project_controls: '项目管控',
+      design: '设计与 BIM',
+      schedule: '进度',
+      documents: '文档',
+      communications: '沟通',
+      commercial: '商务'
+    },
+    directions: { import: '导入', export: '导出', bidirectional: '双向' },
+    modules: {
+      contracts: '合同',
+      procurement: '采购',
+      budget: '预算',
+      schedule: '进度',
+      qaqc: '质量',
+      hse: 'HSE',
+      field: '现场',
+      documents: '文档',
+      reports: '报告',
+      approvals: '审批',
+      costs: '成本'
+    },
+    formatsEyebrow: '进度文件格式',
+    formatsTitle: '原生进度导入，不只是 CSV。',
+    formatsCopy: '按计划工程师实际使用的格式接入，保留 WBS、活动、逻辑关系与基线。',
+    formats: [
+      { title: 'Primavera P6 XER', text: '原生 XER 导入，包含 WBS、活动、逻辑关系与基线。' },
+      { title: 'MS Project XML', text: '面向以 Microsoft Project 为标准的团队的原生 XML 导入。' },
+      { title: 'CSV', text: '为其他计划工具的导出、或快速启动首个试点提供的通用路径。' }
+    ],
+    syncEyebrow: '同步行为',
+    syncTitle: '按小时跑也扛得住的设计。',
+    syncItems: [
+      {
+        title: '增量同步',
+        text: '连接器只搬运发生变化的部分，而不是每次运行都重新导入整个文档库。'
+      },
+      {
+        title: '结果回写',
+        text: '结果与发布的报告会回流到源系统，避免智能层变成工作成果的埋葬地。'
+      },
+      {
+        title: '健康与错误',
+        text: '每个连接器都记录最近一次同步、健康检查与错误，并在集成指挥中心呈现。'
+      },
+      {
+        title: '受限凭据',
+        text: '每个连接器独立的 OAuth 或 API Key，按引用存储，作用域限定在配置它的租户。'
+      }
+    ],
+    apiEyebrow: '自行构建',
+    apiTitle: '这一切之下是一套开放 API。',
+    apiCopy:
+      '两个产品都通过 HTTP 暴露完整能力面，配有 OpenAPI 3.0 文档、用于实时的 SSE 事件流，以及用于对外集成的 Webhook。如果某个连接器还不存在，API 并不是次一等的路径 —— 它就是连接器自己走的那条路。',
+    apiItems: [
+      { value: '143', label: 'Construction OS 的 API 端点数' },
+      { value: '60+', label: 'Construction Twin 的 API 端点数' },
+      { value: 'OpenAPI 3.0', label: '位于 /docs 的自助文档' },
+      { value: 'SSE', label: '面向审批、任务与现场事件的实时流' }
+    ]
+  },
+
   notFound: {
     title: '页面未找到',
     lede: '你访问的页面不存在，或者已经迁移。',

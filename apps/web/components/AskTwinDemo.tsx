@@ -40,12 +40,17 @@ export function AskTwinDemo({ locale, t }: { locale: Locale; t: Dictionary }) {
       <div className="answer-panel">
         <div className="answer-head">
           <span>{ta.label}</span>
-          <strong>
-            {answer.confidence}% {ta.confidence}
-          </strong>
+          <span className="answer-head-right">
+            {answer.provisional && <i className="provisional-badge">{ta.provisionalBadge}</i>}
+            <strong className={answer.provisional ? 'is-capped' : ''}>
+              {answer.confidence}% {ta.confidence}
+            </strong>
+          </span>
         </div>
 
-        <p className="answer-summary">{answer.summary}</p>
+        <p className={`answer-summary${answer.provisional ? ' is-provisional' : ''}`}>
+          {answer.summary}
+        </p>
 
         <ol className="claim-list">
           {answer.claims.map((claim) => (
@@ -103,6 +108,28 @@ export function AskTwinDemo({ locale, t }: { locale: Locale; t: Dictionary }) {
           <span>{ta.recommendedAction}</span>
           <strong>{answer.recommendation} →</strong>
         </div>
+
+        {/* The product returns this block on every answer; the demo shows the
+            same fields so it cannot imply more certainty than the real thing. */}
+        <dl className="provenance">
+          <div>
+            <dt>{ta.provenance}</dt>
+            <dd>{answer.reasoning.modelBacked ? ta.modelBacked : ta.localReasoner}</dd>
+          </div>
+          <div>
+            <dt>{ta.retrievalLabel}</dt>
+            <dd>{answer.reasoning.retrieval.toUpperCase()}</dd>
+          </div>
+          <div>
+            <dt>{ta.sampleLabel}</dt>
+            <dd>
+              {answer.reasoning.sampleSize > 0
+                ? `${answer.reasoning.sampleSize} ${ta.activities}`
+                : ta.noEvidence}
+            </dd>
+          </div>
+        </dl>
+        <p className="provenance-note">{ta.provenanceNote}</p>
       </div>
     </div>
   );

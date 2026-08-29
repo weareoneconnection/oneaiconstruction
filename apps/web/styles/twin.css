@@ -685,3 +685,69 @@
   color: var(--text);
   margin-left: 8px;
 }
+
+/* --- Ask Twin: provenance and the provisional state ---------------------- */
+
+.answer-head-right {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.provisional-badge {
+  font-style: normal;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  padding: 4px 8px;
+  border-radius: 999px;
+  color: var(--amber);
+  border: 1px solid rgba(255, 193, 90, 0.4);
+  background: rgba(255, 193, 90, 0.08);
+}
+
+.answer-head strong.is-capped {
+  color: var(--amber);
+}
+
+.answer-summary.is-provisional {
+  padding-left: 18px;
+  border-left: 2px solid var(--amber);
+  color: var(--text-soft);
+}
+
+.provenance {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 20px 0 0;
+  padding-top: 18px;
+  border-top: 1px solid var(--line);
+}
+
+.provenance > div {
+  flex: 1 1 140px;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--surface-sunken);
+}
+
+.provenance dt {
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted-dim);
+}
+
+.provenance dd {
+  margin: 6px 0 0;
+  font-size: 13px;
+  color: var(--text-soft);
+}
+
+.provenance-note {
+  margin: 12px 0 0;
+  font-size: 11.5px;
+  color: var(--muted-dim);
+}

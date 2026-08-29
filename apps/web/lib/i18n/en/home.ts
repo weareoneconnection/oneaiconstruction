@@ -8,10 +8,21 @@ export const home = {
   ctaSecondary: 'Explore Construction Twin',
   principle: ['SEE', 'UNDERSTAND', 'PREDICT', 'ACT'],
   signals: [
-    { title: 'Evidence-first', text: 'No AI conclusion without evidence.' },
-    { title: 'Human-governed', text: 'AI recommends. Humans approve.' },
-    { title: 'Enterprise-ready', text: 'Built around project control and auditability.' }
+    {
+      title: 'Evidence-first',
+      text: 'No matching record? The answer is capped at 0.4 confidence and says so.'
+    },
+    {
+      title: 'Citations verified',
+      text: 'We check our own AI’s references, and name the ones it could not support.'
+    },
+    {
+      title: 'Accuracy published',
+      text: 'Every prediction is scored against what actually happened, to a fixed tolerance.'
+    }
   ],
+  signalsLink: 'See how each of these is enforced →',
+
   dataFlow: {
     eyebrow: 'FROM DATA TO INTELLIGENCE',
     title: 'Turn fragmented project data into a living decision system.',
@@ -63,7 +74,7 @@ export const home = {
     title: 'See the project across time.',
     copy: 'Compare baseline, actual progress and a forecast range from the same project context. Move the data date to watch the uncertainty cone respond.'
   },
-  metricsLink: 'See how these were measured →',
+  metricsLink: 'See the full validation report →',
   prediction: {
     eyebrow: 'FROM REPORTING TO PREDICTION',
     title: 'Know the risk before it becomes the report.',

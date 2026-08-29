@@ -38,7 +38,8 @@
 
   .feature-grid,
   .control-grid,
-  .metric-strip-grid {
+  .metric-strip-grid,
+  .inline-metrics {
     grid-template-columns: 1fr 1fr;
   }
 
@@ -118,7 +119,8 @@
     grid-template-columns: 1fr;
   }
 
-  .signal-grid > div {
+  .signal-grid > div,
+  .signal-grid > a {
     border-right: 0;
     border-bottom: 1px solid var(--line);
   }
@@ -177,6 +179,7 @@
   .feature-grid,
   .control-grid,
   .metric-strip-grid,
+  .inline-metrics,
   .pilot-detail,
   .timeline-steps,
   .contact-points {

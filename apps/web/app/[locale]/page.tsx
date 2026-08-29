@@ -64,11 +64,16 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
       <section className="signal-strip">
         <div className="container signal-grid">
           {h.signals.map((signal) => (
-            <div key={signal.title}>
+            <Link key={signal.title} href={localePath(locale, '/customers')}>
               <strong>{signal.title}</strong>
               <span>{signal.text}</span>
-            </div>
+            </Link>
           ))}
+        </div>
+        <div className="container signal-foot">
+          <Link className="inline-link" href={localePath(locale, '/customers')}>
+            {h.signalsLink}
+          </Link>
         </div>
       </section>
 
@@ -137,7 +142,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
 
       <section className="metric-strip">
         <div className="container metric-strip-grid">
-          {t.customers.metrics.map((metric) => (
+          {t.customers.validationItems.map((metric) => (
             <div key={metric.label}>
               <strong>{metric.value}</strong>
               <span>{metric.label}</span>

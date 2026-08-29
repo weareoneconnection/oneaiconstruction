@@ -30,6 +30,7 @@ export const routes = [
   { path: '/products/construction-twin', priority: 0.9 },
   { path: '/solutions', priority: 0.8 },
   { path: '/platform', priority: 0.8 },
+  { path: '/integrations', priority: 0.8 },
   { path: '/industries', priority: 0.7 },
   { path: '/enterprise', priority: 0.8 },
   { path: '/security', priority: 0.7 },

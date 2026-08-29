@@ -8,10 +8,21 @@ export const home = {
   ctaSecondary: '体验 Construction Twin',
   principle: ['看见', '理解', '预测', '行动'],
   signals: [
-    { title: '证据优先', text: '没有证据，就没有 AI 结论。' },
-    { title: '人类治理', text: 'AI 提出建议，人来批准。' },
-    { title: '企业就绪', text: '围绕项目管控与可审计性构建。' }
+    {
+      title: '证据优先',
+      text: '没有匹配到记录？回答的置信度封顶 0.4，并且会直说。'
+    },
+    {
+      title: '引用可核验',
+      text: '我们核验自己 AI 的引用，并点名它无法支撑的那一条。'
+    },
+    {
+      title: '准确度公开',
+      text: '每个预测都以固定容差，对照实际发生的结果评分。'
+    }
   ],
+  signalsLink: '看看每一条是如何被强制执行的 →',
+
   dataFlow: {
     eyebrow: '从数据到智能',
     title: '把割裂的项目数据变成能做决策的活系统。',
@@ -56,7 +67,7 @@ export const home = {
     title: '在时间维度上看见项目。',
     copy: '在同一份项目上下文中对比基线、实际进度与预测区间。拖动数据日期，观察不确定性区间如何变化。'
   },
-  metricsLink: '看看这些数字是如何度量出来的 →',
+  metricsLink: '查看完整验证报告 →',
   prediction: {
     eyebrow: '从报告到预测',
     title: '在风险变成报告之前就知道它。',

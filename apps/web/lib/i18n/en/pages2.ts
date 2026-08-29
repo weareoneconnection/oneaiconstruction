@@ -3,80 +3,111 @@ export const pages2 = {
     meta: {
       title: 'Security & Trust',
       description:
-        'Data residency, model handling, access control, auditability and assurance for OneAI Construction. Your project data is never used to train foundation models.'
+        'What is implemented today in OneAI Construction, stated precisely: OIDC sign-in, SCIM provisioning, TOTP two-factor, tenant isolation, hash-chained verifiable audit, and the assurance work that is still ahead of us.'
     },
     eyebrow: 'SECURITY & TRUST',
-    h1: 'Your project data stays yours.',
-    lede: 'Capital project data is commercially sensitive and frequently contested. Everything below is designed around that reality rather than retrofitted onto a consumer AI product.',
+    h1: 'What is actually implemented.',
+    lede: 'Capital project data is commercially sensitive and frequently contested. Every control below exists in shipped code today. Where a control is not yet built, this page says so rather than implying it.',
     cta: 'Request the security pack',
     commitments: [
       {
         title: 'Never used for training',
-        text: 'Your project data does not train foundation models. Contractually committed.'
+        text: 'Your project data does not train foundation models. Committed contractually, and the platform is model-agnostic by design.'
       },
       {
         title: 'You choose the region',
-        text: 'EU, UK, US or a customer-nominated region, including your own VPC.'
+        text: 'Deployment to EU, UK, US or a customer-nominated region, including your own VPC.'
       },
       {
         title: 'Every conclusion is auditable',
-        text: 'Evidence, reasoning, approval and outcome are recorded and exportable.'
+        text: 'Observations, recommendations, approvals and executions are written to a hash-chained log with a verification endpoint.'
       }
     ],
-    controlsEyebrow: 'CONTROLS',
-    controlsTitle: 'What is in place today.',
+    controlsEyebrow: 'IMPLEMENTED',
+    controlsTitle: 'Controls that exist in shipped code.',
     controlsCopy:
-      'We distinguish between what is implemented, what is in programme and what is on the roadmap — and we will tell you which is which in a security review.',
+      'Everything in this section is running in the product today. It is the list we would walk a security reviewer through, line by line.',
     controls: [
       {
-        heading: 'Data residency and isolation',
+        heading: 'Identity and access',
         points: [
-          'Single-tenant project data isolation with per-project encryption scope',
-          'Deployment to EU, UK, US or customer-nominated regions',
-          'Private cloud and customer-VPC deployment supported for enterprise agreements'
+          'OIDC sign-in with PKCE, session refresh and provider sign-out (Construction Twin)',
+          'SCIM 2.0 user provisioning and de-provisioning (Construction OS)',
+          'TOTP two-factor enrollment to RFC 6238, compatible with standard authenticator apps',
+          'Role-based access control scoped to tenant, organization, project and record type',
+          'AI agents inherit — and cannot exceed — the permissions of their principal'
+        ]
+      },
+      {
+        heading: 'Verifiable audit',
+        points: [
+          'Hash-chained audit records, making tampering detectable rather than merely discouraged',
+          'A verification endpoint that re-walks the chain and reports the first break',
+          'Every AI conclusion linked to the evidence set that was visible at the time',
+          'Exportable audit trail suitable for claims and dispute proceedings'
+        ]
+      },
+      {
+        heading: 'Tenant and data isolation',
+        points: [
+          'Tenant, organization and project scoping enforced at the data-access layer',
+          'Generated assets served through authenticated, tenant-scoped delivery — no public static mount',
+          'Cross-tenant asset access is refused, and that refusal is covered by an automated test',
+          'Upload type, size, filename and checksum validation on ingest'
+        ]
+      },
+      {
+        heading: 'Operations and recovery',
+        points: [
+          'Database and object-store backup, verification and restore utilities',
+          'Scheduled data-retention sweeps, plus an on-demand sweep for a data-subject request',
+          'Backup restore drills exposed as an operation, not left as a manual runbook step',
+          'Readiness and health endpoints, worker heartbeats, Prometheus metrics and optional OpenTelemetry export'
+        ]
+      },
+      {
+        heading: 'Application hardening',
+        points: [
+          'Rate limiting keyed on a stable credential fingerprint, per caller',
+          'Request IDs and security headers on every response',
+          'Short-lived access tokens with refresh and session revocation',
+          'Continuous dependency scanning; typecheck, lint, unit tests and build gated in CI'
         ]
       },
       {
         heading: 'Model handling',
         points: [
           'Customer project data is never used to train foundation models',
-          'Zero-retention inference agreements with model providers where offered',
           'Model-agnostic routing — no lock-in to a single provider or model generation',
-          'Self-hosted open-weight models available for restricted-data workloads'
+          'Self-hosted open-weight models available for restricted-data workloads',
+          'Every AI response reports whether it was model-backed, and by which provider and model'
         ]
+      }
+    ],
+    roadmapEyebrow: 'NOT YET BUILT',
+    roadmapTitle: 'What we have not done.',
+    roadmapCopy:
+      'Most vendors leave this section out. We would rather you learn it here than four meetings into a procurement process.',
+    roadmap: [
+      {
+        heading: 'SAML 2.0 single sign-on',
+        text: 'Not implemented. OIDC and SCIM are. If your identity platform requires SAML specifically, tell us during pilot scoping — it is a known gap, not a surprise.'
       },
       {
-        heading: 'Access and identity',
-        points: [
-          'SSO via SAML 2.0 and OIDC; SCIM user provisioning',
-          'Role-based access control scoped to project, package and record type',
-          'Agents inherit — and cannot exceed — the permissions of their principal'
-        ]
+        heading: 'SOC 2 Type II and ISO 27001',
+        text: 'Neither certification is held today, and no audit is in progress. The controls above are designed to be auditable when we start, but we will not claim a programme we have not begun.'
       },
       {
-        heading: 'Auditability',
-        points: [
-          'Immutable log of observations, recommendations, approvals and executions',
-          'Every AI conclusion linked to the evidence set visible at the time',
-          'Exportable audit trail suitable for claims and dispute proceedings'
-        ]
+        heading: 'Third-party penetration testing',
+        text: 'Not yet commissioned. Internal review, automated dependency scanning and CI gates are in place. An external test is planned before general availability.'
       },
       {
-        heading: 'Encryption and infrastructure',
-        points: [
-          'TLS 1.3 in transit; AES-256 at rest',
-          'Secrets management with scoped, rotating credentials',
-          'Continuous dependency and container vulnerability scanning'
-        ]
+        heading: 'Immutable audit storage',
+        text: 'The audit chain makes tampering detectable. It does not make records immutable — WORM storage or an external notary would be required, and neither is in the product today.'
       },
       {
-        heading: 'Assurance programme',
-        points: [
-          'SOC 2 Type II programme underway — current status shared under NDA',
-          'ISO 27001 alignment as the control baseline',
-          'Annual third-party penetration testing; summary reports available to customers',
-          'Documented incident response with contractual notification windows'
-        ]
+        heading: 'Load and availability testing at scale',
+        text: 'Load-testing tooling ships with the product, but published availability figures are operating targets rather than a measured or contractual SLA.'
       }
     ],
     disclosure: {
@@ -93,65 +124,73 @@ export const pages2 = {
 
   customers: {
     meta: {
-      title: 'Customers & Results',
+      title: 'Proof & Accuracy',
       description:
-        'How capital project teams use OneAI Construction to surface risk earlier, assemble evidence-backed delay narratives faster and make forecast decisions they can defend.'
+        'How OneAI Construction proves what it claims: published prediction tolerances scored against measured outcomes, an evidence policy enforced in code, and release validation you can reproduce.'
     },
-    eyebrow: 'CUSTOMERS',
-    h1: 'Measured on decisions, not dashboards.',
-    lede: 'We deploy on one project, agree the success test before we start, and report against it honestly. These are the results that came out of that process.',
-    metrics: [
+    eyebrow: 'PROOF',
+    h1: 'We publish how we are wrong.',
+    lede: 'We are pre-reference-customer, so there are no case studies on this page yet. What we can show you is the machinery that will produce them — and that already runs against every prediction the platform makes.',
+    metricsEyebrow: 'MEASURED, NOT CLAIMED',
+    metricsTitle: 'Every prediction is scored against what actually happened.',
+    metricsCopy:
+      'A prediction is written down with a due date. When that date arrives, the platform compares it to the measured outcome and records the absolute error and whether it was a hit. The tolerances are fixed in code and unit-tested — we cannot quietly widen them to flatter a result.',
+    toleranceHeaders: {
+      kind: 'Prediction',
+      tolerance: 'Counts as a hit within',
+      where: 'Measured against'
+    },
+    tolerances: [
+      { kind: 'Schedule delay', tolerance: '±7 days', where: 'Forecast delay at the horizon date' },
+      { kind: 'Cost forecast', tolerance: '±10%', where: 'Forecast amount at the horizon date' },
       {
-        value: '14 days',
-        label: 'Median lead time on risks surfaced before they hit a progress report'
-      },
-      { value: '−71%', label: 'Time to assemble an evidence-backed delay narrative' },
-      { value: '<3 min', label: 'Median time to retrieve the records behind any project claim' },
-      { value: '100%', label: 'AI-recommended actions carrying a named human approval' }
-    ],
-    casesEyebrow: 'CASE STUDIES',
-    casesTitle: 'What changed on the project.',
-    casesCopy:
-      'Each engagement below started as a fixed-scope pilot with a named metric. Client identities are withheld at their request; figures are verified against project records.',
-    labels: { challenge: 'Challenge', approach: 'Approach', outcome: 'Outcome' },
-    cases: [
-      {
-        slug: 'rail-station-package',
-        sector: 'Rail & Transit',
-        title: 'Roof steel risk surfaced 14 days before it reached a report',
-        scope: 'Metro station package · 18-month programme · 4 primary subcontractors',
-        challenge:
-          'Progress reporting ran on a monthly cycle. Delivery constraints on connection plates were visible in procurement records weeks before they appeared as schedule variance, but nothing connected the two systems.',
-        approach:
-          'Connected IFC geometry, the baseline schedule, daily reports and delivery records into a single Project World Model. Risk drivers were linked back to source records so that every forecast movement could be attributed.',
-        outcomes: [
-          'Connection-plate lead-time drift detected 14 days before the activity became critical',
-          'Delay narrative assembly reduced from roughly two days to under four hours',
-          'Recovery scenario comparison moved from opinion to two costed forecast curves'
-        ],
-        disclosure: 'Client anonymised at their request. Figures verified against project records.'
-      },
-      {
-        slug: 'data-centre-fitout',
-        sector: 'Industrial',
-        title: 'One evidence trail across four reporting systems',
-        scope: 'Hyperscale data centre fit-out · multi-package delivery',
-        challenge:
-          'Four contractors reported progress in four formats. Reconciling claimed against evidenced completion consumed most of the project controls team’s week.',
-        approach:
-          'Ingested each reporting stream into a shared activity and evidence layer, with automated reconciliation between claimed percent-complete and inspection-backed completion.',
-        outcomes: [
-          'Weekly reconciliation effort reduced from around three days to half a day',
-          'Claimed-versus-evidenced gap made visible per package for the first time',
-          'Commercial team gained a defensible record ahead of a contested variation'
-        ],
-        disclosure: 'Client anonymised at their request. Figures verified against project records.'
+        kind: 'Risk level',
+        tolerance: '±20 points',
+        where: 'Project risk score at the horizon date'
       }
     ],
+    tolerancesNote:
+      'Hit rate and mean absolute error are exposed to every customer through the platform’s own analytics, per organization. When we have enough scored predictions across live projects to be statistically meaningful, the aggregate lands on this page — good or bad.',
+    evidenceEyebrow: 'ENFORCED IN CODE',
+    evidenceTitle: 'The evidence policy is a constraint, not a slogan.',
+    evidenceCopy:
+      'These four behaviours are implemented in the reasoning service and covered by the release test suite. They are not prompt instructions, which a model is free to ignore.',
+    evidenceItems: [
+      {
+        title: 'No record, no confident answer',
+        text: 'When nothing in the project matches the question, the response is flagged provisional, confidence is capped at 0.4, and the answer text states it must not be used as the basis for a contractual decision.'
+      },
+      {
+        title: 'The AI’s own citations are verified',
+        text: 'Every reference in an answer is checked against the records actually retrieved. If the model cites something that was not, confidence is capped at 0.45 and the answer names the unverified reference.'
+      },
+      {
+        title: 'Provenance on every response',
+        text: 'Each answer reports whether it was model-backed, which provider and model produced it, the retrieval method, and the schedule sample size it reasoned over.'
+      },
+      {
+        title: 'Thin samples refuse to look confident',
+        text: 'With fewer than three measured activities the forecast returns the recorded baseline delay and a warning, instead of a distribution that would look authoritative and be meaningless.'
+      }
+    ],
+    validationEyebrow: 'RELEASE VALIDATION',
+    validationTitle: 'What was actually tested in the last release.',
+    validationCopy:
+      'These are the numbers from the product’s own validation report, not a marketing summary of it.',
+    validationItems: [
+      { value: '31', label: 'Automated tests passing against an isolated database per run' },
+      { value: '29', label: 'Live end-to-end checks against a running API and asset worker' },
+      { value: '100', label: 'Pilot readiness score from the end-to-end validation chain' },
+      { value: '143', label: 'API endpoints across the Construction OS service surface' }
+    ],
+    limitsEyebrow: 'BOUNDARIES',
+    limitsTitle: 'We publish our limitations.',
+    limitsCopy:
+      'The product ships a numbered list of explicit boundaries — uncalibrated risk heuristics, lexical rather than semantic retrieval, forecast that does not traverse the dependency network. Ask for it during evaluation and we will hand it over before you ask twice.',
     finalCta: {
       eyebrow: 'YOUR PROJECT',
-      title: 'Run the same test.',
-      copy: 'Pick one project and one decision that is currently hard to make. We will scope a pilot around it and agree how we will know whether it worked.',
+      title: 'Be the first reference.',
+      copy: 'Pick one project and one decision that is currently hard to make. We agree the success test in writing before we start, and we report against it honestly — including when it fails.',
       primary: 'Start an Enterprise Pilot',
       secondary: 'Book a Demo'
     }

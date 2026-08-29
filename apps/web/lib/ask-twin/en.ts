@@ -111,7 +111,8 @@ export const en: AskTwinContent = {
       confidence: 89,
       confidenceBasis:
         'Four independent records, three of them primary sources, all within the variance window. No contradicting evidence found.',
-      recommendation: 'Review mitigation scenario S-04 with the Project Director'
+      recommendation: 'Review mitigation scenario S-04 with the Project Director',
+      reasoning: { modelBacked: true, mode: 'model-backed', retrieval: 'bm25', sampleSize: 42 }
     },
     {
       question: 'What is the current schedule risk?',
@@ -135,6 +136,7 @@ export const en: AskTwinContent = {
       confidenceBasis:
         'Model run is current (28 August) and its drivers trace to primary records. Confidence is capped below 90 because enclosure exposure rests on a single progress update.',
       recommendation: 'Escalate connection-plate lead time to the procurement review',
+      reasoning: { modelBacked: true, mode: 'model-backed', retrieval: 'bm25', sampleSize: 42 },
       unsupported:
         'No evidence was found linking the M&E package to this exposure. Any claim of downstream M&E impact is currently unsupported.'
     },
@@ -155,7 +157,25 @@ export const en: AskTwinContent = {
       confidence: 81,
       confidenceBasis:
         'Scenario is modelled against current project state, but crane availability is a single-source claim and the window closes on 2 September.',
-      recommendation: 'Human approval required before publishing the mitigation plan'
+      recommendation: 'Human approval required before publishing the mitigation plan',
+      reasoning: { modelBacked: true, mode: 'model-backed', retrieval: 'bm25', sampleSize: 42 }
+    },
+    {
+      question: 'Will the M&E package be affected?',
+      summary:
+        'No project record matched this question, so this response is provisional and must not be used as the basis for a contractual decision.',
+      claims: [],
+      confidence: 40,
+      confidenceBasis:
+        'Confidence is capped at 0.4 because retrieval returned no matching record. This cap is enforced in the reasoning service, not left to the model.',
+      recommendation: 'Ingest the M&E package records, then ask again',
+      provisional: true,
+      reasoning: {
+        modelBacked: true,
+        mode: 'model-backed',
+        retrieval: 'bm25',
+        sampleSize: 0
+      }
     }
   ]
 };

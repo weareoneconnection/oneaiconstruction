@@ -71,6 +71,19 @@ export default async function SecurityPage({ params }: { params: Promise<{ local
         </div>
       </Section>
 
+      {/* Publishing the gaps is the point: a reviewer finds them here rather
+          than four meetings into a procurement process. */}
+      <Section eyebrow={p.roadmapEyebrow} title={p.roadmapTitle} copy={p.roadmapCopy} tone="raised">
+        <div className="roadmap-list">
+          {p.roadmap.map((item) => (
+            <article className="roadmap-item" key={item.heading}>
+              <h3>{item.heading}</h3>
+              <p>{item.text}</p>
+            </article>
+          ))}
+        </div>
+      </Section>
+
       <Section eyebrow={p.disclosure.eyebrow} title={p.disclosure.title} copy={p.disclosure.copy}>
         <div className="disclosure-card">
           <div>

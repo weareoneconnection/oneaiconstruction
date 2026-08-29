@@ -188,6 +188,99 @@ export const pages3 = {
     notFound: 'Not found'
   },
 
+  integrations: {
+    meta: {
+      title: 'Integrations',
+      description:
+        'Bidirectional connectors to Procore, Autodesk Construction Cloud and Primavera P6, plus SharePoint, Google Drive, Outlook, Gmail and ERP — with delta sync and write-back.'
+    },
+    eyebrow: 'INTEGRATIONS',
+    h1: 'Connect the systems you already run.',
+    lede: 'OneAI Construction is an intelligence layer, which only works if it reads from the systems your teams use today. Connectors are bidirectional where the source platform allows it, support delta sync, and write results back rather than stranding them.',
+    ctaPrimary: 'Discuss your stack',
+    ctaSecondary: 'See the platform',
+    catalogEyebrow: 'CONNECTOR CATALOG',
+    catalogTitle: 'What ships today.',
+    catalogCopy:
+      'Each connector declares its direction, the modules it feeds and the objects it moves. Nothing on this page is a roadmap item.',
+    headers: {
+      connector: 'Connector',
+      auth: 'Auth',
+      direction: 'Direction',
+      modules: 'Feeds'
+    },
+    categories: {
+      project_controls: 'Project controls',
+      design: 'Design & BIM',
+      schedule: 'Schedule',
+      documents: 'Documents',
+      communications: 'Communications',
+      commercial: 'Commercial'
+    },
+    directions: { import: 'Import', export: 'Export', bidirectional: 'Bidirectional' },
+    modules: {
+      contracts: 'Contracts',
+      procurement: 'Procurement',
+      budget: 'Budget',
+      schedule: 'Schedule',
+      qaqc: 'QA/QC',
+      hse: 'HSE',
+      field: 'Field',
+      documents: 'Documents',
+      reports: 'Reports',
+      approvals: 'Approvals',
+      costs: 'Costs'
+    },
+    formatsEyebrow: 'SCHEDULE FORMATS',
+    formatsTitle: 'Native schedule import, not just CSV.',
+    formatsCopy:
+      'Schedules arrive in the formats planners actually work in. WBS, activities, logic relationships and baselines are preserved.',
+    formats: [
+      {
+        title: 'Primavera P6 XER',
+        text: 'Native XER import, including WBS, activities, relationships and baselines.'
+      },
+      {
+        title: 'MS Project XML',
+        text: 'Native XML import for teams standardised on Microsoft Project.'
+      },
+      {
+        title: 'CSV',
+        text: 'A plain path for exports from any other planning tool, or for a fast first pilot.'
+      }
+    ],
+    syncEyebrow: 'HOW SYNC BEHAVES',
+    syncTitle: 'Designed to survive being run every hour.',
+    syncItems: [
+      {
+        title: 'Delta sync',
+        text: 'Connectors move what changed rather than re-importing whole libraries on every run.'
+      },
+      {
+        title: 'Write-back',
+        text: 'Results and published reports flow back to the source system, so the intelligence layer does not become a place work goes to die.'
+      },
+      {
+        title: 'Health and errors',
+        text: 'Every connector records its last sync, last health check and last error, surfaced in the integration command centre.'
+      },
+      {
+        title: 'Scoped credentials',
+        text: 'OAuth or API key per connector, stored by reference, scoped to the tenant that configured it.'
+      }
+    ],
+    apiEyebrow: 'BUILD YOUR OWN',
+    apiTitle: 'An open API underneath all of it.',
+    apiCopy:
+      'Both products expose their full surface over HTTP with OpenAPI 3.0 documentation, server-sent events for realtime, and webhooks for outbound integration. If a connector does not exist yet, the API is not a second-class path — it is the same one the connectors use.',
+    apiItems: [
+      { value: '143', label: 'API endpoints across Construction OS' },
+      { value: '60+', label: 'API endpoints across Construction Twin' },
+      { value: 'OpenAPI 3.0', label: 'Self-serve documentation at /docs' },
+      { value: 'SSE', label: 'Realtime event stream for approvals, jobs and field events' }
+    ]
+  },
+
   notFound: {
     title: 'Page not found',
     lede: 'The page you asked for does not exist, or has moved.',

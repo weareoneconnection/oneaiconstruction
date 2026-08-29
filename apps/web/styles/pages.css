@@ -573,3 +573,95 @@
   font-size: 13px;
   letter-spacing: 0.24em;
 }
+
+/* --- Proof: tolerance table ---------------------------------------------- */
+
+.tolerance-value {
+  color: var(--cyan);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.table-note {
+  margin: 20px 0 0;
+  max-width: 76ch;
+  font-size: 13.5px;
+  line-height: 1.7;
+  color: var(--muted);
+}
+
+.inline-metrics {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+
+/* --- Security: published gaps -------------------------------------------- */
+
+.roadmap-list {
+  display: grid;
+  gap: 12px;
+  max-width: 900px;
+}
+
+.roadmap-item {
+  position: relative;
+  padding: 22px 24px 22px 26px;
+  border: 1px solid var(--line);
+  border-left: 2px solid var(--amber);
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+  background: var(--surface);
+}
+
+.roadmap-item h3 {
+  font-size: 17px;
+  margin: 0 0 8px;
+  color: var(--amber);
+}
+
+.roadmap-item p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--muted);
+  max-width: 74ch;
+}
+
+/* --- Integrations: connector table --------------------------------------- */
+
+.connector-table th[scope='row'] strong {
+  display: block;
+  color: var(--text);
+  font-weight: 600;
+}
+
+.connector-category {
+  display: block;
+  margin-top: 4px;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted-dim);
+}
+
+.connector-table td {
+  width: auto;
+  vertical-align: top;
+}
+
+.module-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.module-tags i {
+  font-style: normal;
+  font-size: 11px;
+  padding: 4px 8px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--text-soft);
+  white-space: nowrap;
+}
