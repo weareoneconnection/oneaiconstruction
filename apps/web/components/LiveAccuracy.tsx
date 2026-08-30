@@ -48,6 +48,22 @@ export function LiveAccuracy({ locale, t }: { locale: Locale; t: Dictionary }) {
    */
   const MIN_SCORED_FOR_RATE = 10;
 
+  /**
+   * Mean absolute error is in the prediction's own units: days, points, or
+   * currency. A cost error printed raw reads as `6887674.26`, which is a
+   * number nobody parses at a glance — compact notation for the large one,
+   * plain for the small ones.
+   */
+  function formatError(kind: string, value: number): string {
+    if (kind === 'forecast_cost') {
+      return new Intl.NumberFormat(locale === 'zh' ? 'zh-CN' : 'en-US', {
+        notation: 'compact',
+        maximumFractionDigits: 1
+      }).format(value);
+    }
+    return String(value);
+  }
+
   const totalScored = accuracy.kinds.reduce((sum, kind) => sum + kind.scored, 0);
   const asOf = new Date(accuracy.generatedAt).toLocaleDateString(
     locale === 'zh' ? 'zh-CN' : 'en-US',
@@ -96,7 +112,7 @@ export function LiveAccuracy({ locale, t }: { locale: Locale; t: Dictionary }) {
                 <td>
                   {kind.meanAbsoluteError === null || kind.scored < MIN_SCORED_FOR_RATE
                     ? ta.none
-                    : kind.meanAbsoluteError}
+                    : formatError(kind.kind, kind.meanAbsoluteError)}
                 </td>
               </tr>
             ))}

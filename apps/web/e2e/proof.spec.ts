@@ -351,25 +351,28 @@ test.describe('the answer is requested in the reader’s language', () => {
     ['/zh/products/construction-twin', 'zh']
   ] as const) {
     test(`${path} asks for ${locale}`, async ({ page }) => {
-      let sent: { question?: string; locale?: string } | null = null;
+      // Collected in an array: TypeScript cannot see the assignment inside the
+      // route callback and narrows a reassigned `let` to `never` after a null
+      // check, which is a lie about what the test observed.
+      const sent: { question?: string; locale?: string }[] = [];
 
       await page.route('**/public/demo/ask', async (route) => {
-        sent = JSON.parse(route.request().postData() ?? '{}');
+        sent.push(JSON.parse(route.request().postData() ?? '{}'));
         await route.abort();
       });
 
       await page.goto(path);
       await page.waitForTimeout(2500);
 
-      if (sent === null) {
+      if (sent.length === 0) {
         // No endpoint configured in this build; covered by the fallback tests.
         test.skip();
         return;
       }
 
-      expect(sent!.locale).toBe(locale);
+      expect(sent[0].locale).toBe(locale);
       // English on both, so one allowlist serves every locale.
-      expect(sent!.question).toMatch(/^[\x20-\x7E]+$/);
+      expect(sent[0].question).toMatch(/^[\x20-\x7E]+$/);
     });
   }
 });
