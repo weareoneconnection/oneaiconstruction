@@ -74,7 +74,9 @@ are written to the server log and nothing is delivered.
 **Point the product URLs at first-party subdomains.** Vendor origins
 (`*.vercel.app`, `*.up.railway.app`) must not appear in public marketing.
 
-See `docs/DEPLOYMENT.md` for the full pre-launch checklist.
+See `docs/DEPLOYMENT.md` for the full pre-launch checklist, and
+`docs/OPERATIONS.md` for the current state of the estate and what is still
+outstanding across the three repositories.
 
 ## Adding an article
 
