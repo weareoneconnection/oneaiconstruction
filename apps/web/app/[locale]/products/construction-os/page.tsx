@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { FeatureGrid } from '../../../../components/FeatureGrid';
+import { LiveCommercial } from '../../../../components/LiveCommercial';
 import { JsonLd } from '../../../../components/JsonLd';
 import { Section } from '../../../../components/Section';
 import { productUrls } from '../../../../lib/config';
@@ -55,6 +56,10 @@ export default async function OSPage({ params }: { params: Promise<{ locale: str
 
       <Section eyebrow={p.capabilitiesEyebrow} title={p.capabilitiesTitle}>
         <FeatureGrid items={p.capabilities} />
+      </Section>
+
+      <Section eyebrow={t.demos.commercial.eyebrow} title={t.demos.commercial.title} tone="raised">
+        <LiveCommercial locale={locale} t={t} />
       </Section>
 
       <Section

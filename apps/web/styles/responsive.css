@@ -39,7 +39,8 @@
   .feature-grid,
   .control-grid,
   .metric-strip-grid,
-  .inline-metrics {
+  .inline-metrics,
+  .cost-grid {
     grid-template-columns: 1fr 1fr;
   }
 

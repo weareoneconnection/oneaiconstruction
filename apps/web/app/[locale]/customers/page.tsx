@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { FeatureGrid } from '../../../components/FeatureGrid';
+import { LiveAccuracy } from '../../../components/LiveAccuracy';
 import { JsonLd } from '../../../components/JsonLd';
 import { Section } from '../../../components/Section';
 import { getDictionary } from '../../../lib/i18n/dictionaries';
@@ -65,6 +66,7 @@ export default async function ProofPage({ params }: { params: Promise<{ locale: 
           </table>
         </div>
         <p className="table-note">{p.tolerancesNote}</p>
+        <LiveAccuracy locale={locale} t={t} />
       </Section>
 
       <Section eyebrow={p.evidenceEyebrow} title={p.evidenceTitle} copy={p.evidenceCopy}>

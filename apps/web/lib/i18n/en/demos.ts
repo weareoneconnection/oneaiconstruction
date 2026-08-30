@@ -86,6 +86,46 @@ export const demos = {
     p90: 'P90',
     days: 'd'
   },
+  accuracy: {
+    badge: 'LIVE',
+    title: 'Scored so far',
+    headers: {
+      kind: 'Prediction',
+      scored: 'Scored',
+      hitRate: 'Within tolerance',
+      mae: 'Mean absolute error'
+    },
+    kinds: {
+      delay_days: 'Schedule delay',
+      forecast_cost: 'Cost forecast',
+      risk_level: 'Risk level'
+    },
+    pending: 'not yet due',
+    none: '—',
+    totalPredictions: 'predictions recorded',
+    asOf: 'as of',
+    thin: 'Too few scored predictions to read anything into yet. The figures move as predictions reach their horizon date, and this page shows whatever they say.'
+  },
+  commercial: {
+    badge: 'LIVE',
+    eyebrow: 'LIVE COST POSITION',
+    title: 'The cost picture, from the running product.',
+    copy: 'Aggregate figures from a demonstration organization, read live. No contracts, vendors or project names — the shape of the position, not somebody’s ledger.',
+    metrics: {
+      baselineAmount: 'Approved baseline',
+      committedAmount: 'Committed',
+      actualAmount: 'Actual to date',
+      forecastAmount: 'Forecast at completion',
+      varianceAmount: 'Variance vs baseline',
+      pendingChangeAmount: 'Pending change orders',
+      claimAmount: 'Open claims',
+      exposureAmount: 'Total exposure'
+    },
+    flagsTitle: 'What the platform is flagging',
+    severity: { high: 'High', medium: 'Medium', low: 'Low' },
+    projects: 'projects',
+    contracts: 'contracts'
+  },
   timeline: {
     eyebrow: '4D PROJECT INTELLIGENCE',
     title: 'Baseline · Actual · Forecast range',

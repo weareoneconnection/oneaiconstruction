@@ -82,6 +82,41 @@ export const demos = {
     p90: 'P90',
     days: '天'
   },
+  accuracy: {
+    badge: '实时',
+    title: '已评分结果',
+    headers: { kind: '预测类型', scored: '已评分', hitRate: '落在容差内', mae: '平均绝对误差' },
+    kinds: {
+      delay_days: '工期延误',
+      forecast_cost: '成本预测',
+      risk_level: '风险等级'
+    },
+    pending: '尚未到期',
+    none: '—',
+    totalPredictions: '条已记录的预测',
+    asOf: '截至',
+    thin: '已评分的预测还太少，暂时读不出结论。随着预测陆续到期，这些数字会变化，而这个页面会如实显示它们说的话。'
+  },
+  commercial: {
+    badge: '实时',
+    eyebrow: '实时成本状况',
+    title: '来自运行中产品的成本全景。',
+    copy: '实时读取的演示组织聚合数据。不含合同、供应商或项目名称 —— 展示的是成本状况的形态，而不是某个组织的账本。',
+    metrics: {
+      baselineAmount: '批准基线',
+      committedAmount: '已承诺',
+      actualAmount: '至今实际',
+      forecastAmount: '完工预测',
+      varianceAmount: '相对基线偏差',
+      pendingChangeAmount: '待批变更令',
+      claimAmount: '未决索赔',
+      exposureAmount: '总敞口'
+    },
+    flagsTitle: '平台正在提示的风险',
+    severity: { high: '高', medium: '中', low: '低' },
+    projects: '个项目',
+    contracts: '份合同'
+  },
   timeline: {
     eyebrow: '4D 项目智能',
     title: '基线 · 实际 · 预测区间',

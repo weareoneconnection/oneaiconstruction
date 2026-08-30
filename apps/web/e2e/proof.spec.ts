@@ -185,3 +185,40 @@ test.describe('a slow answer is not treated as a dead endpoint', () => {
     expect(marked).toBeNull();
   });
 });
+
+test.describe('Construction OS live panels degrade safely', () => {
+  /**
+   * NEXT_PUBLIC_OS_DEMO_API is unset in the test build, which is the shipped
+   * default. Both panels must be absent rather than empty, and the pages they
+   * sit on must be unaffected.
+   */
+  test('the proof page works without the accuracy panel', async ({ page }) => {
+    await page.goto('/en/customers');
+
+    await expect(page.locator('.live-accuracy')).toHaveCount(0);
+
+    // The published tolerances — the promise the panel fulfils — still stand.
+    await expect(page.locator('.tolerance-table').getByText('±7 days')).toBeVisible();
+    await expect(page.getByText(/lands on this page/)).toBeVisible();
+  });
+
+  test('the OS product page works without the cost panel', async ({ page }) => {
+    await page.goto('/en/products/construction-os');
+
+    await expect(page.locator('.live-commercial')).toHaveCount(0);
+
+    // The module descriptions carry the page on their own.
+    await expect(page.getByRole('heading', { name: 'Commercial control' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Field & smart site' })).toBeVisible();
+  });
+
+  test('a dead OS endpoint does not break either page', async ({ page }) => {
+    await page.route('**/public/demo/**', (route) => route.abort());
+
+    for (const path of ['/en/customers', '/en/products/construction-os']) {
+      await page.goto(path);
+      await expect(page.locator('h1')).toHaveCount(1);
+      await expect(page.locator('.live-accuracy, .live-commercial')).toHaveCount(0);
+    }
+  });
+});
