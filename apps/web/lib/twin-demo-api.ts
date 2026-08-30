@@ -151,7 +151,10 @@ export async function fetchDemoMeta(): Promise<DemoMeta | null> {
   };
 }
 
-export async function fetchDemoAnswer(question: string): Promise<DemoAnswer | null> {
+export async function fetchDemoAnswer(
+  question: string,
+  locale: string
+): Promise<DemoAnswer | null> {
   const raw = await get<{
     question: string;
     answer: string;
@@ -176,7 +179,9 @@ export async function fetchDemoAnswer(question: string): Promise<DemoAnswer | nu
     {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ question })
+      // The question stays English — it is the endpoint's allowlist key —
+      // while `locale` selects the language the answer is written in.
+      body: JSON.stringify({ question, locale })
     },
     { timeoutMs: ASK_TIMEOUT_MS }
   );

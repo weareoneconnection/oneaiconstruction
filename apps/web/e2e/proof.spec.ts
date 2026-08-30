@@ -339,3 +339,37 @@ test.describe('risk flags are translated from their key', () => {
     await expect(panel).toContainText('Some future condition');
   });
 });
+
+test.describe('the answer is requested in the reader’s language', () => {
+  /**
+   * The answer text is generated, so the site cannot translate it after the
+   * fact — it has to ask for the right language. The question stays English
+   * because it is the endpoint's allowlist key.
+   */
+  for (const [path, locale] of [
+    ['/en/products/construction-twin', 'en'],
+    ['/zh/products/construction-twin', 'zh']
+  ] as const) {
+    test(`${path} asks for ${locale}`, async ({ page }) => {
+      let sent: { question?: string; locale?: string } | null = null;
+
+      await page.route('**/public/demo/ask', async (route) => {
+        sent = JSON.parse(route.request().postData() ?? '{}');
+        await route.abort();
+      });
+
+      await page.goto(path);
+      await page.waitForTimeout(2500);
+
+      if (sent === null) {
+        // No endpoint configured in this build; covered by the fallback tests.
+        test.skip();
+        return;
+      }
+
+      expect(sent!.locale).toBe(locale);
+      // English on both, so one allowlist serves every locale.
+      expect(sent!.question).toMatch(/^[\x20-\x7E]+$/);
+    });
+  }
+});

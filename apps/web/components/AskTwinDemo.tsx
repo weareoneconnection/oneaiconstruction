@@ -66,12 +66,12 @@ export function AskTwinDemo({ locale, t }: { locale: Locale; t: Dictionary }) {
 
     requested.current.add(askKey);
     setPending(true);
-    fetchDemoAnswer(askKey)
+    fetchDemoAnswer(askKey, locale)
       .then((result) => {
         if (result) setLiveAnswers((value) => ({ ...value, [askKey]: result }));
       })
       .finally(() => setPending(false));
-  }, [live, askKey, liveAnswers]);
+  }, [live, askKey, liveAnswers, locale]);
 
   const liveAnswer = liveAnswers[askKey];
   const isLive = Boolean(liveAnswer);
