@@ -222,3 +222,50 @@ test.describe('Construction OS live panels degrade safely', () => {
     }
   });
 });
+
+test.describe('the accuracy panel withholds meaningless rates', () => {
+  /**
+   * The demo organization currently holds one scored prediction, which yields a
+   * 100% hit rate. Printing that on a page arguing "we publish how we are
+   * wrong" would be the failure the page describes: a reader screenshots the
+   * 100% and the caveat does not travel with it.
+   */
+  test('a rate under the minimum sample is not rendered', async ({ page }) => {
+    await page.route('**/public/demo/accuracy', (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({
+          ok: true,
+          item: {
+            generatedAt: new Date().toISOString(),
+            totalPredictions: 1,
+            kinds: [
+              {
+                kind: 'risk_level',
+                total: 1,
+                open: 0,
+                scored: 1,
+                hitRate: 100,
+                meanAbsoluteError: 4
+              }
+            ]
+          }
+        })
+      })
+    );
+
+    await page.goto('/en/customers');
+
+    const panel = page.locator('.live-accuracy');
+    if ((await panel.count()) === 0) {
+      // No endpoint configured in this build; the fallback case is covered
+      // elsewhere and there is nothing to assert here.
+      test.skip();
+      return;
+    }
+
+    await expect(panel).not.toContainText('100%');
+    await expect(panel).toContainText('1');
+  });
+});

@@ -104,7 +104,7 @@ export const demos = {
     none: '—',
     totalPredictions: 'predictions recorded',
     asOf: 'as of',
-    thin: 'Too few scored predictions to read anything into yet. The figures move as predictions reach their horizon date, and this page shows whatever they say.'
+    thin: 'A rate is withheld until a prediction type has at least 10 scored results — a percentage over one or two is noise, not a result. The counts are shown regardless, and the rates appear as predictions reach their horizon date.'
   },
   commercial: {
     badge: 'LIVE',

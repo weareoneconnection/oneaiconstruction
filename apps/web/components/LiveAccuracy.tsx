@@ -38,6 +38,16 @@ export function LiveAccuracy({ locale, t }: { locale: Locale; t: Dictionary }) {
 
   if (!accuracy || accuracy.kinds.length === 0) return null;
 
+  /**
+   * Below this, a percentage is noise rather than a result.
+   *
+   * A 100% hit rate over one scored prediction is not a good result — it is
+   * not a result at all, and printing it beside a caveat still leaves "100%"
+   * as the thing a reader screenshots. The scored count is always shown, so
+   * nothing is hidden; only the meaningless ratio is withheld.
+   */
+  const MIN_SCORED_FOR_RATE = 10;
+
   const totalScored = accuracy.kinds.reduce((sum, kind) => sum + kind.scored, 0);
   const asOf = new Date(accuracy.generatedAt).toLocaleDateString(
     locale === 'zh' ? 'zh-CN' : 'en-US',
@@ -79,18 +89,24 @@ export function LiveAccuracy({ locale, t }: { locale: Locale; t: Dictionary }) {
                   )}
                 </td>
                 <td className="tolerance-value">
-                  {kind.hitRate === null ? ta.none : `${kind.hitRate}%`}
+                  {kind.hitRate === null || kind.scored < MIN_SCORED_FOR_RATE
+                    ? ta.none
+                    : `${kind.hitRate}%`}
                 </td>
-                <td>{kind.meanAbsoluteError === null ? ta.none : kind.meanAbsoluteError}</td>
+                <td>
+                  {kind.meanAbsoluteError === null || kind.scored < MIN_SCORED_FOR_RATE
+                    ? ta.none
+                    : kind.meanAbsoluteError}
+                </td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
 
-      {/* A hit rate over three scored predictions is noise, and presenting it
-          without saying so would be the exact failure this page argues against. */}
-      {totalScored < 20 && <p className="table-note">{ta.thin}</p>}
+      {totalScored < MIN_SCORED_FOR_RATE * accuracy.kinds.length && (
+        <p className="table-note">{ta.thin}</p>
+      )}
     </div>
   );
 }
