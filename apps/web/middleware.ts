@@ -74,8 +74,14 @@ function matchAcceptLanguage(header: string | null): Locale | null {
 
 export const config = {
   /**
-   * Skip Next internals, the API, and any path with a file extension so
-   * sitemap.xml, robots.txt, the manifest and generated images are untouched.
+   * Skip Next internals, the API, and any path with a file extension, so
+   * sitemap.xml, robots.txt and manifest.webmanifest are untouched.
+   *
+   * The generated metadata images need naming explicitly: `/icon` and
+   * `/opengraph-image` carry no file extension, so the extension rule alone let
+   * them through and they were redirected to `/en/opengraph-image`, which does
+   * not exist. That silently broke every social share card and the tab icon,
+   * while every page still looked fine.
    */
-  matcher: ['/((?!_next|api|.*\\..*).*)']
+  matcher: ['/((?!_next|api|icon|apple-icon|opengraph-image|twitter-image|.*\\..*).*)']
 };

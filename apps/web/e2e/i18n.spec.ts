@@ -71,3 +71,39 @@ test.describe('locale routing', () => {
     await expect(page.locator('.prose')).toContainText('共享的语义层');
   });
 });
+
+test.describe('metadata routes escape the locale redirect', () => {
+  /**
+   * These live at the app root, not under `[locale]`. The middleware's
+   * "skip anything with a file extension" rule does not cover them, because
+   * they have none — so they were being redirected to `/en/opengraph-image`,
+   * which 404s. Every page still looked fine while every social share card
+   * and the browser tab icon was broken.
+   */
+  for (const path of ['/opengraph-image', '/icon']) {
+    test(`${path} is served directly, not redirected`, async ({ request }) => {
+      const response = await request.get(path, { maxRedirects: 0 });
+      expect(response.status(), `${path} must not redirect`).toBe(200);
+      expect(response.headers()['content-type']).toContain('image/');
+    });
+  }
+
+  for (const path of ['/sitemap.xml', '/robots.txt', '/manifest.webmanifest']) {
+    test(`${path} is served directly`, async ({ request }) => {
+      const response = await request.get(path, { maxRedirects: 0 });
+      expect(response.status(), `${path} must not redirect`).toBe(200);
+    });
+  }
+
+  test('the og:image URL a crawler reads actually resolves', async ({ page, request }) => {
+    await page.goto('/en');
+    const url = await page.locator('meta[property="og:image"]').getAttribute('content');
+    expect(url).toBeTruthy();
+
+    // The tag carries an absolute production URL; re-point it at the server
+    // under test so this checks the route, not the live site.
+    const { pathname, search } = new URL(url as string);
+    const response = await request.get(`${pathname}${search}`, { maxRedirects: 0 });
+    expect(response.status()).toBe(200);
+  });
+});
