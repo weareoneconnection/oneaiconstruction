@@ -25,16 +25,15 @@
   flex-shrink: 0;
 }
 
-.brand-mark {
-  display: grid;
-  place-items: center;
-  width: 38px;
-  height: 38px;
-  border: 1px solid rgba(55, 216, 255, 0.45);
-  border-radius: 10px;
-  background: linear-gradient(135deg, rgba(55, 216, 255, 0.12), rgba(74, 130, 255, 0.08));
-  font-weight: 800;
-  color: var(--cyan);
+/*
+ * The mark carries its own colour: `currentColor` is the structure, and the
+ * cyan member is set inside the SVG. Inheriting the text colour is what lets
+ * one file work on a dark header, a light document and a single-colour print.
+ */
+.brand-glyph {
+  display: block;
+  flex-shrink: 0;
+  color: var(--text);
 }
 
 .brand strong,

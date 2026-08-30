@@ -376,3 +376,33 @@ test.describe('the answer is requested in the reader’s language', () => {
     });
   }
 });
+
+test.describe('the brand mark', () => {
+  test('the header carries the drawn mark, not the old letters', async ({ page }) => {
+    await page.goto('/en');
+
+    const glyph = page.locator('header .brand-glyph');
+    await expect(glyph).toBeVisible();
+
+    // The mark is decorative inside a link that already names itself.
+    await expect(glyph).toHaveAttribute('aria-hidden', 'true');
+    await expect(page.locator('header')).not.toContainText('1A');
+  });
+
+  test('the favicon and OG image render as images', async ({ request }) => {
+    for (const path of ['/icon', '/opengraph-image']) {
+      const response = await request.get(path, { maxRedirects: 0 });
+      expect(response.status(), path).toBe(200);
+      expect(response.headers()['content-type']).toContain('image/');
+    }
+  });
+
+  test('the standalone assets are served', async ({ request }) => {
+    for (const name of ['oneai-construction', 'construction-os', 'construction-twin']) {
+      for (const variant of ['', '-light', '-mono', '-icon']) {
+        const response = await request.get(`/brand/${name}${variant}.svg`);
+        expect(response.status(), `${name}${variant}`).toBe(200);
+      }
+    }
+  });
+});

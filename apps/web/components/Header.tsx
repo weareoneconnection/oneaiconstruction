@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { BrandMark } from './BrandMark';
 import { LanguageSwitcher } from './LanguageSwitcher';
 import { MobileNav } from './MobileNav';
 import type { Dictionary } from '../lib/i18n/dictionaries';
@@ -16,9 +17,7 @@ export function Header({ locale, t }: { locale: Locale; t: Dictionary }) {
     <header className="site-header">
       <div className="container nav-shell">
         <Link href={localePath(locale, '/')} className="brand" aria-label={t.nav.homeLabel}>
-          <span className="brand-mark" aria-hidden="true">
-            1A
-          </span>
+          <BrandMark size={38} />
           <span>
             <strong>ONEAI</strong>
             <small>CONSTRUCTION</small>

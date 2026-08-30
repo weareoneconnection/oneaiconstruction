@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { BrandMark } from './BrandMark';
 import { contactEmail, site } from '../lib/config';
 import type { Dictionary } from '../lib/i18n/dictionaries';
 import { localePath, type Locale } from '../lib/i18n/config';
@@ -10,9 +11,7 @@ export function Footer({ locale, t }: { locale: Locale; t: Dictionary }) {
       <div className="container footer-grid">
         <div>
           <div className="brand footer-brand">
-            <span className="brand-mark" aria-hidden="true">
-              1A
-            </span>
+            <BrandMark size={38} />
             <span>
               <strong>ONEAI</strong>
               <small>CONSTRUCTION</small>

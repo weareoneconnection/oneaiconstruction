@@ -21,22 +21,35 @@ export default function OpengraphImage() {
       }}
     >
       <div style={{ display: 'flex', alignItems: 'center', gap: 18 }}>
-        <div
-          style={{
-            width: 56,
-            height: 56,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            border: '2px solid rgba(55,216,255,0.45)',
-            borderRadius: 14,
-            color: '#37d8ff',
-            fontSize: 24,
-            fontWeight: 800
-          }}
-        >
-          1A
-        </div>
+        <svg width="60" height="60" viewBox="0 0 64 64">
+          <path
+            d="M32 13 L53 51 L11 51 Z"
+            fill="none"
+            stroke="#f6f8fb"
+            strokeOpacity="0.9"
+            strokeWidth="3.2"
+            strokeLinejoin="round"
+          />
+          <line
+            x1="21"
+            y1="35"
+            x2="43"
+            y2="35"
+            stroke="#f6f8fb"
+            strokeOpacity="0.9"
+            strokeWidth="3.2"
+            strokeLinecap="round"
+          />
+          <line
+            x1="32"
+            y1="13"
+            x2="32"
+            y2="51"
+            stroke="#37d8ff"
+            strokeWidth="3.2"
+            strokeLinecap="round"
+          />
+        </svg>
         <div style={{ display: 'flex', flexDirection: 'column' }}>
           <span style={{ fontSize: 22, fontWeight: 700, letterSpacing: 2 }}>ONEAI</span>
           <span style={{ fontSize: 13, color: '#9aa8b7', letterSpacing: 6 }}>CONSTRUCTION</span>
