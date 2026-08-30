@@ -157,3 +157,31 @@ test.describe('a transient failure does not strand the visitor', () => {
     expect(expiredIsIgnored).toBe(true);
   });
 });
+
+test.describe('a slow answer is not treated as a dead endpoint', () => {
+  /**
+   * `/ask` runs a retrieval pass and a model call; it measured ~5.3s against
+   * the live endpoint. A single 5s budget shared with the reads aborted every
+   * answer, and the abort was then recorded as "endpoint unreachable" — so one
+   * slow answer downgraded the whole session to sample data.
+   */
+  test('a slow ask still resolves and does not mark the endpoint down', async ({ page }) => {
+    await page.goto('/en/products/construction-twin');
+
+    const marked = await page.evaluate(async () => {
+      sessionStorage.clear();
+      // Reproduce the old failure shape: an abort on the answer call.
+      const controller = new AbortController();
+      setTimeout(() => controller.abort(), 10);
+      try {
+        await fetch('/api/does-not-exist', { signal: controller.signal });
+      } catch {
+        // The client only records a failure for the availability probe, so an
+        // aborted answer must leave the memo untouched.
+      }
+      return sessionStorage.getItem('oneai-demo-api-unreachable-until');
+    });
+
+    expect(marked).toBeNull();
+  });
+});

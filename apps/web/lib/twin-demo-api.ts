@@ -10,7 +10,13 @@
  * See the product's docs/PUBLIC_DEMO.md for the contract.
  */
 
-const TIMEOUT_MS = 5000;
+/**
+ * Reads are database queries and answer in well under a second. `/ask` runs a
+ * retrieval pass and a model call, and measured ~5.3s against the live demo
+ * endpoint — a single shared 5s budget aborted it every time.
+ */
+const READ_TIMEOUT_MS = 5000;
+const ASK_TIMEOUT_MS = 20000;
 
 export type DemoMeta = {
   readOnly: boolean;
@@ -92,12 +98,19 @@ export function demoApiUnreachable(): boolean {
   }
 }
 
-async function get<T>(path: string, init?: RequestInit): Promise<T | null> {
+async function get<T>(
+  path: string,
+  init?: RequestInit,
+  {
+    timeoutMs = READ_TIMEOUT_MS,
+    recordFailure = false
+  }: { timeoutMs?: number; recordFailure?: boolean } = {}
+): Promise<T | null> {
   const base = demoApiBase();
   if (!base || demoApiUnreachable()) return null;
 
   const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
 
   try {
     const response = await fetch(`${base}${path}`, {
@@ -111,7 +124,10 @@ async function get<T>(path: string, init?: RequestInit): Promise<T | null> {
     if (!response.ok) return null;
     return (await response.json()) as T;
   } catch {
-    markUnreachable();
+    // Only the availability probe records a failure. A slow or aborted data
+    // call means this request did not land, not that the endpoint is down —
+    // and treating the two the same is what stranded visitors on sample data.
+    if (recordFailure) markUnreachable();
     return null;
   } finally {
     clearTimeout(timer);
@@ -124,7 +140,7 @@ export async function fetchDemoMeta(): Promise<DemoMeta | null> {
     project_id: string;
     allowed_questions: string[];
     disclosure: string;
-  }>('/meta');
+  }>('/meta', undefined, { recordFailure: true });
   if (!raw?.project_id || !Array.isArray(raw.allowed_questions)) return null;
 
   return {
@@ -155,11 +171,15 @@ export async function fetchDemoAnswer(question: string): Promise<DemoAnswer | nu
       retrieval?: string;
       schedule_sample_size?: number;
     };
-  }>('/ask', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ question })
-  });
+  }>(
+    '/ask',
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ question })
+    },
+    { timeoutMs: ASK_TIMEOUT_MS }
+  );
 
   if (!raw?.answer) return null;
 
