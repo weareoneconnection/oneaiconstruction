@@ -57,18 +57,22 @@ export function demoApiBase(): string | null {
   return base ? base.replace(/\/$/, '') : null;
 }
 
-const UNREACHABLE_KEY = 'oneai-demo-api-unreachable';
+const UNREACHABLE_KEY = 'oneai-demo-api-unreachable-until';
 
 /**
- * Once the endpoint has failed, stop probing it for the rest of the session.
+ * How long a failure is remembered. Long enough to stop a dead endpoint being
+ * retried on every page view; short enough that a visitor who arrives during a
+ * deploy or a cold start is not stuck on sample data for their whole session.
  *
- * Without this, every page view retries a dead endpoint and logs another
- * browser-level network error to the console. A visitor who opens devtools on
- * a marketing site should not find it arguing with an API.
+ * An earlier version remembered the failure for the entire session, which meant
+ * one transient blip permanently downgraded that visitor even though the
+ * endpoint recovered seconds later.
  */
+const UNREACHABLE_TTL_MS = 90_000;
+
 function markUnreachable(): void {
   try {
-    sessionStorage.setItem(UNREACHABLE_KEY, '1');
+    sessionStorage.setItem(UNREACHABLE_KEY, String(Date.now() + UNREACHABLE_TTL_MS));
   } catch {
     // Private browsing, or storage disabled. Retrying is the acceptable cost.
   }
@@ -76,7 +80,13 @@ function markUnreachable(): void {
 
 export function demoApiUnreachable(): boolean {
   try {
-    return sessionStorage.getItem(UNREACHABLE_KEY) === '1';
+    const until = Number(sessionStorage.getItem(UNREACHABLE_KEY));
+    if (!until) return false;
+    if (Date.now() >= until) {
+      sessionStorage.removeItem(UNREACHABLE_KEY);
+      return false;
+    }
+    return true;
   } catch {
     return false;
   }

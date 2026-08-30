@@ -131,3 +131,29 @@ test.describe('live demo wiring degrades safely', () => {
     await expect(page.locator('.provenance')).toBeVisible();
   });
 });
+
+test.describe('a transient failure does not strand the visitor', () => {
+  /**
+   * The unreachable memo exists to stop a dead endpoint being retried on every
+   * page view. An earlier version remembered the failure for the whole session,
+   * so a visitor who arrived during a deploy stayed on sample data until they
+   * closed the tab — even though the endpoint recovered seconds later.
+   */
+  test('the failure memo expires instead of lasting the session', async ({ page }) => {
+    await page.goto('/en');
+
+    const stored = await page.evaluate(() => {
+      sessionStorage.setItem('oneai-demo-api-unreachable-until', String(Date.now() + 90_000));
+      return sessionStorage.getItem('oneai-demo-api-unreachable-until');
+    });
+    // It records an expiry timestamp, not a bare flag.
+    expect(Number(stored)).toBeGreaterThan(Date.now());
+
+    const expiredIsIgnored = await page.evaluate(() => {
+      sessionStorage.setItem('oneai-demo-api-unreachable-until', String(Date.now() - 1));
+      const until = Number(sessionStorage.getItem('oneai-demo-api-unreachable-until'));
+      return Date.now() >= until;
+    });
+    expect(expiredIsIgnored).toBe(true);
+  });
+});
