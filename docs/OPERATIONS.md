@@ -61,6 +61,15 @@ Procedure: `OnAIConstructionOS/docs/CREDENTIAL_ROTATION.md`.
 - [ ] **Clean the 14 test projects** in the Twin's `demo-tenant`. The public
       demo cannot reach them — it is pinned to `public-demo-tenant` — but they
       should not survive into a production database.
+- [ ] **Configure an identity provider for the Twin.** The API runs
+      `AUTH_MODE=jwt` with `oidc: null`, so the only way to sign in to
+      `twin.oneaiconstruction.com` is to paste a token minted with the
+      deployment's `JWT_SECRET` (`scripts/mint_token.py` in the Twin repo).
+      That works for operators and for nobody else. Before anyone outside the
+      team gets an account, set `OIDC_ISSUER`, `OIDC_AUDIENCE` and
+      `OIDC_CLIENT_ID` — `docs/AUTH_OIDC.md` there has the full procedure.
+      Re-enabling `ALLOW_DEV_HEADER_AUTH` is not the fix: it grants any
+      anonymous caller `platform_admin`, which is the hole this closed.
 - [ ] **Commission an external penetration test.** The Security & Trust page
       says it has not been done; that statement should stop being true before
       general availability.
