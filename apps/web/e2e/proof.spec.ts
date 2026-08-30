@@ -269,3 +269,73 @@ test.describe('the accuracy panel withholds meaningless rates', () => {
     await expect(panel).toContainText('1');
   });
 });
+
+test.describe('risk flags are translated from their key', () => {
+  /**
+   * The API's `label` is English and the site cannot change that without a
+   * backend deploy. `key` is stable, so it is the translation lookup — and an
+   * unknown key must still render something rather than a blank row.
+   */
+  const flags = {
+    ok: true,
+    item: {
+      generatedAt: new Date().toISOString(),
+      riskLevel: 'medium',
+      metrics: {
+        projectCount: 4,
+        contractCount: 8,
+        baselineAmount: 498_000_000,
+        committedAmount: 358_720_000,
+        actualAmount: 198_240_000,
+        forecastAmount: 410_880_000,
+        varianceAmount: -87_120_000,
+        pendingChangeAmount: 4_780_000,
+        claimAmount: 0,
+        exposureAmount: 4_780_000,
+        overduePayments: 0
+      },
+      riskFlags: [
+        {
+          key: 'pending_change_exposure',
+          severity: 'medium',
+          label: 'Pending change orders are open',
+          amount: 4_780_000
+        },
+        { key: 'a_flag_the_site_has_not_seen', severity: 'high', label: 'Some future condition' }
+      ]
+    }
+  };
+
+  test('a known key renders the Chinese label', async ({ page }) => {
+    await page.route('**/public/demo/commercial', (route) =>
+      route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(flags) })
+    );
+
+    await page.goto('/zh/products/construction-os');
+
+    const panel = page.locator('.live-commercial');
+    if ((await panel.count()) === 0) {
+      test.skip();
+      return;
+    }
+
+    await expect(panel).toContainText('存在未批复的变更令');
+    await expect(panel).not.toContainText('Pending change orders are open');
+  });
+
+  test('an unknown key falls back to the API label', async ({ page }) => {
+    await page.route('**/public/demo/commercial', (route) =>
+      route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(flags) })
+    );
+
+    await page.goto('/zh/products/construction-os');
+
+    const panel = page.locator('.live-commercial');
+    if ((await panel.count()) === 0) {
+      test.skip();
+      return;
+    }
+
+    await expect(panel).toContainText('Some future condition');
+  });
+});

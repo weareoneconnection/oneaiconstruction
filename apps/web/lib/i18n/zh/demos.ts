@@ -112,6 +112,13 @@ export const demos = {
       claimAmount: '未决索赔',
       exposureAmount: '总敞口'
     },
+    flags: {
+      forecast_over_baseline: '预测成本已超出批准基线',
+      pending_change_exposure: '存在未批复的变更令',
+      overdue_payments: '付款证书已逾期',
+      high_risk_claims: '高风险索赔或工期展延事项待处理',
+      delayed_procurement: '采购延误可能推高成本'
+    },
     flagsTitle: '平台正在提示的风险',
     severity: { high: '高', medium: '中', low: '低' },
     projects: '个项目',

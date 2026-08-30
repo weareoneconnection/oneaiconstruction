@@ -94,7 +94,10 @@ export function LiveCommercial({ locale, t }: { locale: Locale; t: Dictionary })
                 <span className={`flag-severity is-${flag.severity}`}>
                   {tc.severity[flag.severity as keyof typeof tc.severity] ?? flag.severity}
                 </span>
-                {flag.label}
+                {/* The API's `label` is English. `key` is stable, so it is the
+                    translation lookup; the label is the fallback for a flag
+                    the site does not know about yet. */}
+                {tc.flags[flag.key as keyof typeof tc.flags] ?? flag.label}
                 {typeof flag.count === 'number' && ` (${flag.count})`}
               </li>
             ))}

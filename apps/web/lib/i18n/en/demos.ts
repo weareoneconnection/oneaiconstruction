@@ -121,6 +121,13 @@ export const demos = {
       claimAmount: 'Open claims',
       exposureAmount: 'Total exposure'
     },
+    flags: {
+      forecast_over_baseline: 'Forecast cost is above approved baseline',
+      pending_change_exposure: 'Pending change orders are open',
+      overdue_payments: 'Payment certificates are overdue',
+      high_risk_claims: 'High-risk claims or EOT events need review',
+      delayed_procurement: 'Delayed procurement may drive cost drift'
+    },
     flagsTitle: 'What the platform is flagging',
     severity: { high: 'High', medium: 'Medium', low: 'Low' },
     projects: 'projects',
