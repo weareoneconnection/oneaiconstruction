@@ -21,6 +21,15 @@
     display: grid;
   }
 
+  /*
+   * The header CTA is dropped rather than squeezed: the panel opens with the
+   * same "book a demo" action as its closing button, so nothing is lost, and
+   * the row stops overflowing on a narrow phone.
+   */
+  .site-header .button.small {
+    display: none;
+  }
+
   .hero-grid,
   .two-col,
   .contact-grid {
@@ -90,6 +99,21 @@
 }
 
 @media (max-width: 680px) {
+  /*
+   * The forecast chart was held at min-width 520px so its axis labels stayed
+   * legible, which on a 375px phone put the P50/P90 markers - the only numbers
+   * the panel exists to show - off-screen behind a sideways scroll nobody makes.
+   * Let it fit the screen instead, and scale the label text in viewBox units so
+   * shrinking the chart does not shrink the type below reading size.
+   */
+  .forecast-chart {
+    min-width: 0;
+  }
+
+  .chart-grid text {
+    font-size: 26px;
+  }
+
   .container {
     width: min(100% - 28px, 1200px);
   }

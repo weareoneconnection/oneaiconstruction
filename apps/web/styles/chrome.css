@@ -82,6 +82,16 @@
   align-items: center;
 }
 
+/*
+ * The toggle is the only way into the navigation on a phone, so it must never
+ * be what gives way when the row runs out of room. Without this it was
+ * flex-shrunk from 42px to 25px and pushed past the right edge of a 375px
+ * viewport - the tap target was half off-screen.
+ */
+.nav-toggle {
+  flex-shrink: 0;
+}
+
 /* --- Mobile navigation -------------------------------------------------- */
 
 .nav-toggle {

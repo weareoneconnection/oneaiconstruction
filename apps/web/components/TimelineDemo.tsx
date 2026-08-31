@@ -12,7 +12,15 @@ import type { Dictionary } from '../lib/i18n/dictionaries';
 import { LiveForecast } from './LiveForecast';
 import { format } from '../lib/i18n/format';
 
-const CHART = { width: 720, height: 300, padLeft: 46, padRight: 18, padTop: 16, padBottom: 34 };
+/*
+ * `padLeft` reserves the gutter the y-axis labels are right-aligned into. It has to
+ * hold the widest of them ("100%") at the largest font any breakpoint uses - the
+ * phone one, which is scaled up in viewBox units so the shrunk chart stays legible.
+ * At 46 the mobile labels ran off the left edge of the viewBox and were clipped.
+ * `padBottom` earns its extra room the same way: it separates the "0%" tick from
+ * the "D0" tick below it, which overlapped at the phone font size.
+ */
+const CHART = { width: 720, height: 300, padLeft: 78, padRight: 18, padTop: 16, padBottom: 52 };
 
 export function TimelineDemo({ t }: { t: Dictionary }) {
   const tl = t.demos.timeline;
