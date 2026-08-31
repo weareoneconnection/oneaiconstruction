@@ -60,7 +60,7 @@ test.describe('navigation', () => {
     for (let i = 0; i < count; i += 1) {
       const link = await links.nth(i).boundingBox();
       expect(link).not.toBeNull();
-      expect(link!.top ?? link!.y).toBeGreaterThanOrEqual(box!.y - 1);
+      expect(link!.y).toBeGreaterThanOrEqual(box!.y - 1);
       expect(link!.y + link!.height).toBeLessThanOrEqual(box!.y + box!.height + 1);
     }
   });
