@@ -6,28 +6,36 @@ import type { ReactElement } from 'react';
  * Drawn as literal SVG rather than through the BrandMark component because
  * Satori — which rasterises these routes — resolves no CSS custom properties,
  * so every colour here has to be a literal.
- *
- * `inset` is the share of the tile left empty around the mark. Android masks
- * icons to a circle or squircle and only guarantees the middle 80% survives, so
- * a maskable tile has to hold the whole mark well inside its own edge.
  */
 export const TILE_BACKGROUND = '#070a0e';
 const STROKE = '#f6f8fb';
 const MEMBER = '#37d8ff';
+const STROKE_WIDTH = 3.2;
+
+/**
+ * The mark is drawn on a 64-unit artboard but does not fill it: the truss spans
+ * x 11..53 and y 13..51, so the artboard carries about 29% of its own padding.
+ * Sizing a tile against the artboard therefore paints a mark far smaller than
+ * intended — it is what left the iOS icon at 57% of its tile when it was meant
+ * to be 80%. `MARK_BOX` is the tight square around the painted mark, stroke
+ * included, and `fill` is measured against that.
+ */
+const HALF_STROKE = STROKE_WIDTH / 2;
+const MARK_SIDE = 53 + HALF_STROKE - (11 - HALF_STROKE);
+const MARK_BOX = `${11 - HALF_STROKE} ${32 - MARK_SIDE / 2} ${MARK_SIDE} ${MARK_SIDE}`;
 
 export function brandIconElement({
   size,
   boxed = true,
-  inset = 0
+  fill = 1
 }: {
   size: number;
+  /** Draw the container box at the tile edge. For tiles the platform masks itself, don't. */
   boxed?: boolean;
-  inset?: number;
+  /** Painted width of the mark as a fraction of the tile. Ignored when boxed. */
+  fill?: number;
 }): ReactElement {
-  const mark = Math.round(size * (1 - inset * 2));
-  // Every coordinate below is expressed against the 64-unit grid the mark is
-  // designed on, so the geometry scales exactly rather than being re-tuned.
-  const scale = mark / 64;
+  const inner = boxed ? size : Math.round(size * fill);
 
   return (
     <div
@@ -40,7 +48,7 @@ export function brandIconElement({
         background: TILE_BACKGROUND
       }}
     >
-      <svg width={mark} height={mark} viewBox="0 0 64 64">
+      <svg width={inner} height={inner} viewBox={boxed ? '0 0 64 64' : MARK_BOX}>
         {boxed && (
           <rect
             x="1"
@@ -50,7 +58,7 @@ export function brandIconElement({
             rx="16"
             fill="rgba(55,216,255,0.06)"
             stroke="rgba(55,216,255,0.45)"
-            strokeWidth={Math.max(1, 1 / scale)}
+            strokeWidth="1"
           />
         )}
         <path
@@ -58,7 +66,7 @@ export function brandIconElement({
           fill="none"
           stroke={STROKE}
           strokeOpacity="0.9"
-          strokeWidth="3.2"
+          strokeWidth={STROKE_WIDTH}
           strokeLinejoin="round"
         />
         <line
@@ -68,10 +76,10 @@ export function brandIconElement({
           y2="35"
           stroke={STROKE}
           strokeOpacity="0.9"
-          strokeWidth="3.2"
+          strokeWidth={STROKE_WIDTH}
           strokeLinecap="round"
         />
-        <line x1="32" y1="13" x2="32" y2="51" stroke={MEMBER} strokeWidth="3.2" strokeLinecap="round" />
+        <line x1="32" y1="13" x2="32" y2="51" stroke={MEMBER} strokeWidth={STROKE_WIDTH} strokeLinecap="round" />
       </svg>
     </div>
   );

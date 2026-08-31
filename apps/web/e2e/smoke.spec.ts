@@ -117,6 +117,49 @@ test('the manifest declares installable icons', async ({ request }) => {
   }
 });
 
+/*
+ * The mark is drawn on a 64-unit artboard it does not fill — the truss occupies
+ * about 71% of it — so sizing a tile against the artboard silently paints a much
+ * smaller mark than asked for. That is how the iOS icon shipped at 57% of its
+ * tile when it was meant to be 80%, small enough to look wrong beside other apps
+ * and invisible to every other check: the PNG was the right size and the right
+ * shape.
+ *
+ * So measure the pixels. Anything that is not the tile background is the mark.
+ */
+test('the mark fills its tile', async ({ request }) => {
+  const sharp = (await import('sharp')).default;
+  const background = [7, 10, 14];
+
+  // Android crops a maskable icon to a centred circle of 80% diameter, and a
+  // triangle inside a circle is genuinely tight, so it is held to a lower bar.
+  const expectations = [
+    { path: '/apple-icon', min: 0.7 },
+    { path: '/icon-maskable', min: 0.5 }
+  ];
+
+  for (const { path, min } of expectations) {
+    const png = await (await request.get(path)).body();
+    const { data, info } = await sharp(png).raw().toBuffer({ resolveWithObject: true });
+
+    let left = info.width;
+    let right = -1;
+    for (let y = 0; y < info.height; y += 1) {
+      for (let x = 0; x < info.width; x += 1) {
+        const i = (y * info.width + x) * info.channels;
+        const painted = background.some((channel, offset) => Math.abs(data[i + offset] - channel) > 12);
+        if (painted) {
+          if (x < left) left = x;
+          if (x > right) right = x;
+        }
+      }
+    }
+
+    const filled = (right - left + 1) / info.width;
+    expect(filled, `${path} paints ${Math.round(filled * 100)}% of its tile`).toBeGreaterThanOrEqual(min);
+  }
+});
+
 test('the apple-touch-icon is declared in the head', async ({ page }) => {
   await page.goto('/en');
   await expect(page.locator('link[rel="apple-touch-icon"]')).toHaveCount(1);

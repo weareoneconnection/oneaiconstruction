@@ -62,9 +62,9 @@ source of truth: `apps/web/lib/brand-icon.tsx`.
 | Route | Size | Cut | Used by |
 |---|---|---|---|
 | `/icon` | 64 | boxed | browser tab |
-| `/apple-icon` | 180 | full bleed, 10% inset | iOS add to home screen |
+| `/apple-icon` | 180 | full bleed, 76% fill | iOS add to home screen |
 | `/icon-192`, `/icon-512` | 192, 512 | boxed | manifest, `purpose: any` |
-| `/icon-maskable` | 512 | full bleed, 8% inset | manifest, `purpose: maskable` |
+| `/icon-maskable` | 512 | full bleed, 58% fill | manifest, `purpose: maskable` |
 
 Two rules decide whether a tile keeps its container box:
 
@@ -73,11 +73,22 @@ Two rules decide whether a tile keeps its container box:
   Apple icon loses its border at the four corners and keeps it along the flats.
   Android's maskable crop is worse: a circle.
 - **A masked tile is sized from the safe zone, not by eye.** Android guarantees
-  only a centred circle of 80% diameter. At an 8% inset the truss fills 84% of
-  the tile and its furthest corner sits 190px from centre against a 205px safe
-  radius. Shrinking it further survives the crop but leaves the mark looking
-  lost.
+  only a centred circle of 80% diameter, and a wide triangle inside a circle is
+  genuinely tight: at 58% fill the furthest point of the truss lands 197px from
+  centre against a 205px safe radius, and 62% already clips. That is why the
+  Android tile reads smaller than the iOS one. iOS is far more forgiving — its
+  squircle takes 90% uncut — so 76% is a judgement about how a home screen
+  looks, not a limit.
 
-Changing the mark means changing `brand-icon.tsx` and re-checking that corner
-distance. The tests assert every route serves a real PNG and that the manifest
-still declares a maskable cut; they cannot tell you it looks right.
+**`fill` is the painted width of the mark, not the width of its artboard.** The
+mark sits on a 64-unit artboard it does not fill; the truss spans 45.2 of those
+64 units, so the artboard carries about 29% of its own padding. Sizing a tile
+against the artboard is how the iOS icon first shipped at 57% of its tile when
+it was meant to be 80% — the PNG was the right size and the right shape, and
+only looked wrong next to other apps on a phone. `brand-icon.tsx` uses a tight
+viewBox around the painted mark so `fill` means what it says.
+
+Changing the mark means changing `brand-icon.tsx`, re-deriving `MARK_SIDE`, and
+re-checking the maskable corner distance. `the mark fills its tile` decodes the
+published PNGs and measures the painted bounding box, so an undersized mark
+fails with the percentage it actually painted.

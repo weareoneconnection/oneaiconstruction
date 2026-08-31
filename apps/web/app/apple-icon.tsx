@@ -11,10 +11,14 @@ import { brandIconElement } from '../lib/brand-icon';
  * masks the tile with its own squircle at roughly 22% corner radius, against the
  * box's 25%, so the border would survive along the flats and be cut away at the
  * corners - a frame with four gaps in it. Full bleed lets iOS do the shaping.
+ *
+ * 0.76 is the painted width of the mark against the tile. iOS's squircle is
+ * forgiving enough to take 0.90 uncut, but a mark that close to the edge reads
+ * as cramped next to other icons on a home screen.
  */
 export const size = { width: 180, height: 180 };
 export const contentType = 'image/png';
 
 export default function AppleIcon() {
-  return new ImageResponse(brandIconElement({ size: size.width, boxed: false, inset: 0.10 }), size);
+  return new ImageResponse(brandIconElement({ size: size.width, boxed: false, fill: 0.76 }), size);
 }
