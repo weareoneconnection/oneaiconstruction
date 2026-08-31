@@ -52,3 +52,32 @@ in place of the truss.
 - Red for critical risk
 
 Avoid generic robot imagery, neon cyberpunk visuals, excessive gradients, construction stock photography and generic AI brain graphics.
+
+## Home-screen icons
+
+The marks under `public/brand/` are for documents and slides. What a phone
+installs comes from routes that rasterise the same geometry, so there is one
+source of truth: `apps/web/lib/brand-icon.tsx`.
+
+| Route | Size | Cut | Used by |
+|---|---|---|---|
+| `/icon` | 64 | boxed | browser tab |
+| `/apple-icon` | 180 | full bleed, 10% inset | iOS add to home screen |
+| `/icon-192`, `/icon-512` | 192, 512 | boxed | manifest, `purpose: any` |
+| `/icon-maskable` | 512 | full bleed, 8% inset | manifest, `purpose: maskable` |
+
+Two rules decide whether a tile keeps its container box:
+
+- **A platform that applies its own mask gets full bleed.** iOS crops to a
+  squircle at about 22% corner radius and the box is drawn at 25%, so a boxed
+  Apple icon loses its border at the four corners and keeps it along the flats.
+  Android's maskable crop is worse: a circle.
+- **A masked tile is sized from the safe zone, not by eye.** Android guarantees
+  only a centred circle of 80% diameter. At an 8% inset the truss fills 84% of
+  the tile and its furthest corner sits 190px from centre against a 205px safe
+  radius. Shrinking it further survives the crop but leaves the mark looking
+  lost.
+
+Changing the mark means changing `brand-icon.tsx` and re-checking that corner
+distance. The tests assert every route serves a real PNG and that the manifest
+still declares a maskable cut; they cannot tell you it looks right.

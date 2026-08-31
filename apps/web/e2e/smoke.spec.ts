@@ -82,6 +82,46 @@ test('marketing pages are cacheable, not no-store', async ({ request }) => {
   }
 });
 
+/*
+ * Every one of these 404'd or was absent at some point: the manifest shipped with
+ * no `icons` array at all, and /apple-icon did not exist, so "add to home screen"
+ * gave Android a blank tile and iOS a screenshot of the page. None of it shows up
+ * in the build, in the browser, or on the site itself.
+ */
+test('every home-screen icon is served', async ({ request }) => {
+  const icons = ['/icon', '/apple-icon', '/icon-192', '/icon-512', '/icon-maskable'];
+
+  for (const path of icons) {
+    const response = await request.get(path);
+    expect(response.status(), `${path} must exist`).toBe(200);
+    expect(response.headers()['content-type']).toContain('image/png');
+    // A PNG carries its dimensions in the IHDR chunk at a fixed offset, which is
+    // the only way to tell a real icon from a 1px placeholder.
+    const body = await response.body();
+    expect(body.subarray(0, 8).toString('binary')).toBe('\x89PNG\r\n\x1a\n');
+    expect(body.readUInt32BE(16)).toBeGreaterThanOrEqual(64);
+  }
+});
+
+test('the manifest declares installable icons', async ({ request }) => {
+  const manifest = await (await request.get('/manifest.webmanifest')).json();
+  const icons: { src: string; sizes: string; purpose?: string }[] = manifest.icons ?? [];
+
+  expect(icons.length).toBeGreaterThanOrEqual(3);
+  expect(icons.some((icon) => icon.sizes === '512x512')).toBe(true);
+  // Android crops to a circle; without a maskable cut the mark loses its corners.
+  expect(icons.some((icon) => icon.purpose === 'maskable')).toBe(true);
+
+  for (const icon of icons) {
+    expect((await request.get(icon.src)).status(), `${icon.src} must exist`).toBe(200);
+  }
+});
+
+test('the apple-touch-icon is declared in the head', async ({ page }) => {
+  await page.goto('/en');
+  await expect(page.locator('link[rel="apple-touch-icon"]')).toHaveCount(1);
+});
+
 test('robots.txt points at the sitemap', async ({ request }) => {
   const body = await (await request.get('/robots.txt')).text();
   expect(body).toContain('Sitemap:');
