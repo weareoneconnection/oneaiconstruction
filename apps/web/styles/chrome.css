@@ -306,3 +306,17 @@
 :lang(zh) .prose {
   line-height: 1.85;
 }
+
+/*
+ * Language selection without JavaScript, for the one page that cannot be told
+ * which language it is in: `not-found` reads no route params, so it renders both
+ * and the layout's `<html lang>` decides. `:lang(zh)` matches the `zh-Hans` tag.
+ */
+.locale-only {
+  display: none;
+}
+
+:root:lang(en) .locale-only[data-locale='en'],
+:root:lang(zh) .locale-only[data-locale='zh'] {
+  display: block;
+}

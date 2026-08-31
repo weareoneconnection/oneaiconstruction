@@ -65,6 +65,23 @@ test('sitemap lists every route in both locales', async ({ request }) => {
   }
 });
 
+/*
+ * `not-found.tsx` is part of every page's render tree, so a single dynamic API
+ * call inside it (it used to read a middleware-set header) opted the whole
+ * `[locale]` segment out of static rendering. Next kept reporting the pages as
+ * SSG while emitting no HTML, and every request went to an origin function under
+ * `Cache-Control: no-store` - invisible in the build output and in the browser.
+ * The only reliable signal is the response header, so assert on it.
+ */
+test('marketing pages are cacheable, not no-store', async ({ request }) => {
+  for (const path of ['/en', '/zh', '/zh/products', '/en/resources/project-world-model']) {
+    const response = await request.get(path);
+    expect(response.status()).toBe(200);
+    const cacheControl = response.headers()['cache-control'] ?? '';
+    expect(cacheControl, `${path} must be cacheable`).not.toContain('no-store');
+  }
+});
+
 test('robots.txt points at the sitemap', async ({ request }) => {
   const body = await (await request.get('/robots.txt')).text();
   expect(body).toContain('Sitemap:');

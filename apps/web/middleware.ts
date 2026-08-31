@@ -2,7 +2,6 @@ import { NextResponse, type NextRequest } from 'next/server';
 import { defaultLocale, isLocale, locales, type Locale } from './lib/i18n/config';
 
 const LOCALE_COOKIE = 'oneai-locale';
-export const LOCALE_HEADER = 'x-oneai-locale';
 
 /**
  * Every page lives under an explicit `/en` or `/zh` prefix, which keeps
@@ -16,13 +15,9 @@ export function middleware(request: NextRequest) {
     (locale) => pathname === `/${locale}` || pathname.startsWith(`/${locale}/`)
   );
 
-  if (active) {
-    // `not-found.tsx` cannot read route params, so the resolved locale is
-    // forwarded as a header for it to pick up.
-    const headers = new Headers(request.headers);
-    headers.set(LOCALE_HEADER, active);
-    return NextResponse.next({ request: { headers } });
-  }
+  // A prefixed path is already where it belongs; leave the response untouched so
+  // the prerendered page can be served straight from the edge cache.
+  if (active) return NextResponse.next();
 
   const locale = resolveLocale(request);
   const url = request.nextUrl.clone();
